@@ -6,6 +6,7 @@ The API Fortress Anypoint connector allows you to serialize your API responses i
 for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
 
 link:/api-fortress-connector[API Fortress Connector User Guide]
+link:/doc/user-manual.adoc[API Fortress Connector User Guide]
 
 == 1.0.0 - 09/16/2016
 First release
