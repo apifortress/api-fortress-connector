@@ -1,0 +1,219 @@
+////
+The following is the approved connector user guide template for documenting MuleSoft Supported Connectors.
+////
+
+= API Fortress Anypoint Connector
+:keywords: api, apifortress, testing
+:imagesdir: ./_images
+:toc: macro
+:toclevels: 2
+////
+Image names follow "image:". Identify images using the connector name, preferably without the word "connector"
+URLs should always follow "link:"
+////
+
+// Dropdown for Connector Version
+//  Children: Technical Reference / Demos
+
+toc::[]
+
+
+== Introduction
+
+API Fortress is a world leader in API testing. The API Fortress Anypoint connector allows you to serialize your API responses in Mule and send them to API Fortress
+for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
+//Global rule: the word "connector" should be lower case except when appearing in titles, important URL anchors, and after a MuleSoft tradename such as "Anypoint".
+
+Read through this user guide to understand how to set up and configure a basic flow using the connector. Track feature additions, compatibility, limitations and API version updates with each release of the connector using the link:/release-notes/xyz-connector-release-notes[Connector Release Notes]. Review the connector operations and functionality using the link:/link-to-github.io-or-internal-section[ Technical Reference] alongside the link:https://www.mulesoft.com/exchange#!/?filters=Salesforce&sortBy=rank[demo applications].
+
+MuleSoft maintains this connector under the link:/mule-user-guide/v/3.8/anypoint-connectors#connector-categories[_Insert Category_] support policy.
+
+
+== Prerequisites
+
+This document assumes that you are familiar with Mule,
+link:/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors], and
+link:/mule-fundamentals/v/3.8/anypoint-studio-essentials[Anypoint Studio Essentials]. To increase your familiarity with Studio, consider completing a link:/mule-fundamentals/v/3.8/basic-studio-tutorial[Anypoint Studio Tutorial]. This page requires some basic knowledge of link:/mule-fundamentals/v/3.8/mule-concepts[Mule Concepts], link:/mule-fundamentals/v/3.8/elements-in-a-mule-flow[Elements in a Mule Flow], and link:/mule-fundamentals/v/3.8/global-elements[Global Elements].
+
+
+[[requirements]]
+=== Hardware and Software Requirements
+
+For hardware and software requirements, please visit the link:/mule-user-guide/v/3.8/hardware-and-software-requirements[Hardware and Software Requirements] page.
+
+
+
+=== Compatibility
+
+*Versions* +
+Mule 3.8.0 or newer
+
+== Installing the Connector
+
+You can install the connector in Anypoint Studio using the instructions in
+link:/mule-fundamentals/v/3.8/anypoint-exchange#installing-a-connector-from-anypoint-exchange[Installing a Connector from Anypoint Exchange].
+
+=== Upgrading from an Older Version
+
+If you’re currently using an older version of the connector, a small popup appears in the bottom right corner of Anypoint Studio with an "Updates Available" message.
+
+. Click the popup and check for available updates. 
+. Click the Connector version checkbox and click *Next* and follow the instructions provided by the user interface. 
+. *Restart* Studio when prompted. 
+. After restarting, when creating a flow and using the connector, if you have several versions of the connector installed, you may be asked which version you would like to use. Choose the version you would like to use.
+
+Additionally, we recommend that you keep Studio up to date with its latest version.
+
+== Configuring the Connector Global Element
+
+To use the API Fortress connector in your Mule application, you must configure a global API Fortress element that can be used by the API Fortress connector (read more about  link:/mule-fundamentals/v/3.8/global-elements[Global Elements]). The API Fortress connector offers the following global configuration:
+[width="100a",cols="50a,50a",options="header",]
+|===
+|Field |Description
+|*connectTimeout* | Timeout to connect in seconds.
+|*socketTimeout* | Socket timeout in seconds.
+|*totalConnections* | Maximum number of parallel HTTP connections.
+|*threshold* | Run a test after a certain number of requests have been received.
+|*silent* | True if the API Fortress cloud shouldn't send failure notifications.
+|*dryRun* | True if the API Fortress cloud shouldn't store test results.
+
+
+|===
+
+//image:<connector>-global-element-props.png[<connector>-config]
+
+== Using the Connector
+
+The connector can be placed anywhere in a Mule flow. The payload can either be a plain JSON/XML string or a POJO object that will be converted in JSON.
+Other than the payload, connector will require access to the response headers you can configure in the connector instance configuration. The "content-type" header should be
+present, otherwise text/plain will be used.
+
+Here's the operations the connector provides.
+
+[width="100a",cols="20a,30a,50a",options="header",]
+|===
+|Field |Description| Options
+|*singleTestSynchronous* | The test will run return the results of the test | hook,testId,headers,variables.
+|*singleTestPassthrough* | The test will run and return the received payload | hook,testId,headers,variables.
+|*automatchSynchronous* | The test will run and return tthe results of the test, the "automatch" variable will be used to determine which tests to run | hook,headers,variables.
+|*automatchTestPassthrough* | The test will run and return the received payload | hook,testId,headers,variables.
+
+|===
+
+=== Connector Namespace and Schema
+
+When designing your application in Studio, the act of dragging the connector from the palette onto the Anypoint Studio canvas should automatically populate the XML code with the connector *namespace* and *schema location*.
+
+*Namespace:* `http://www.mulesoft.org/schema/mule/connector`
+*Schema Location:* `http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd`
+
+[TIP]
+If you are manually coding the Mule application in Studio's XML editor or other text editor, define the namespace and schema location in the header of your *Configuration XML*, inside the `<mule>` tag.
+
+[source, xml,linenums]
+----
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:connector="http://www.mulesoft.org/schema/mule/connector"
+      xsi:schemaLocation="
+               http://www.mulesoft.org/schema/mule/core
+               http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+               http://www.mulesoft.org/schema/mule/connector
+               http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd">
+
+      <!-- put your global configuration elements and flows here -->
+
+</mule>
+----
+
+
+=== Using the Connector in a Mavenized Mule App
+
+If you are coding a Mavenized Mule application, this XML snippet must be included in your `pom.xml` file.
+
+[source,xml,linenums]
+----
+<dependency>
+  <groupId></groupId>
+  <artifactId></artifactId>
+  <version></version>
+</dependency>
+----
+
+[TIP]
+====
+Inside the `<version>` tags, put the desired version number, the word `RELEASE` for the latest release, or `SNAPSHOT` for the latest available version. The available versions to date are:
+
+* *x.y.z*
+====
+
+
+== Demo Mule Applications Using Connector
+////
+add links to demos
+////
+
+
+=== Example Use Case
+// Limit to 10 steps
+// Do NOT provide a parallel XML walkthrough. Weave any XML details into steps. Also avoid any unnecessary or marginally helpful screenshots
+
+List potential use cases for this connector. Explain what this example is for
+
+The section should contain a fully functional Mule application as a demo, where the use case is considered. Explain how to create this case with Anypoint Studio Visual editor and what the XML looks like, using a numbered list.
+
+////
+optional
+[tabs]
+-----
+[tab,title="Studio Visual Editor"]
+....
+[tab content goes here]
+....
+[tab,title="XML Editor"]
+....
+[tab content goes here]
+....
+-----
+////
+
+=== Example Use Case - XML
+
+Paste this into Anypoint Studio to interact with the example use case application discussed in this guide.
+
+[source,xml,linenums]
+----
+
+----
+
+
+== Connector Performance
+
+To define the pooling profile for the connector manually, access the *Pooling Profile* tab in the applicable global element for the connector.
+
+For background information on pooling, see link:/mule-user-guide/v/3.8/tuning-performance[Tuning Performance].
+
+
+=== Integration Patterns
+////
+optional
+////
+
+___ recognizes these integration patterns for connecting with other systems…
+
+=== Best Practices
+////
+optional
+////
+To take full advantage of the functionality … +
+
+=== Tips
+////
+optional
+////
+* <Information from Support>
+
+
+== Resources
+
+* Access the link:/release-notes/<System_Name>-connector-release-notes[<System_Name> Connector Release Notes].
