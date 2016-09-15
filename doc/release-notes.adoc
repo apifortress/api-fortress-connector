@@ -1,0 +1,20 @@
+= API Fortress> Connector Release Notes
+:keywords: api, apifortress, testing
+
+
+The API Fortress Anypoint connector allows you to serialize your API responses in Mule and send them to API Fortress
+for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
+
+link:/api-fortress-connector[API Fortress Connector User Guide]
+
+== 1.0.0 - 09/16/2016
+First release
+
+=== Version 1.0.0 Compatibility
+
+[width="100%", cols=",", options="header"]
+|===
+|Software |Version
+|Mule Runtime | 3.8.0
+|API Fortress API | v3
+|===
