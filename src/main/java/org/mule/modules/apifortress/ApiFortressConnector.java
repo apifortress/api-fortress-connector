@@ -17,6 +17,7 @@ import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.display.FriendlyName;
 import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.display.Summary;
+import org.mule.api.annotations.licensing.RequiresEnterpriseLicense;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Payload;
 import org.mule.modules.apifortress.config.ConnectorConfig;
@@ -33,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 @Connector(name = "api-fortress", friendlyName = "API Fortress")
-//@RequiresEnterpriseLicense(allowEval = true)
+@RequiresEnterpriseLicense(allowEval = true)
 public class ApiFortressConnector {
 
     private static final StatusLogger logger = StatusLogger.getLogger();
