@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.responses.ApiFortressResponse;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
+import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
 public class SingleTestSynchronousTestCases
         extends AbstractTestCase<ApiFortressConnector> {
@@ -49,6 +50,7 @@ public class SingleTestSynchronousTestCases
     }
     
     @Test(expected=IOException.class)
+    @MinMuleRuntime(minversion="3.8.0")
     public void wrongProject() throws Exception {
         
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
@@ -59,6 +61,7 @@ public class SingleTestSynchronousTestCases
     }
     
     @Test(expected=IOException.class)
+    @MinMuleRuntime(minversion="3.8.0")
     public void wronTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.getValidHookEndpoint(),
@@ -68,6 +71,7 @@ public class SingleTestSynchronousTestCases
     }
     
     @Test
+    @MinMuleRuntime(minversion="3.8.0")
     public void brokenPayload() throws Exception {
         ApiFortressResponse response = getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}",
                 TestDataBuilder.getValidHookEndpoint(),

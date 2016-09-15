@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.responses.ApiFortressResponses;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
+import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
 public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressConnector> {
 
@@ -18,6 +19,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
         super(ApiFortressConnector.class);
     }
     @Test
+    @MinMuleRuntime(minversion="3.8.0")
     public void basicSuccess() throws Exception {
         
         
@@ -36,6 +38,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
     }
     
     @Test(expected=IOException.class)
+    @MinMuleRuntime(minversion="3.8.0")
     public void wrongProject() throws Exception {
         
         getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
@@ -46,6 +49,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
     }
     
     @Test
+    @MinMuleRuntime(minversion="3.8.0")
     public void noMatch() throws Exception {
         ApiFortressResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.getValidHookEndpoint(),
@@ -56,6 +60,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
     }
     
     @Test
+    @MinMuleRuntime(minversion="3.8.0")
     public void brokenPayload() throws Exception {
         ApiFortressResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}{",
                 TestDataBuilder.getValidHookEndpoint(),

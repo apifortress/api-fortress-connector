@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
+import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
 public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortressConnector> {
 
@@ -29,6 +30,7 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
     }
 
     @Test
+    @MinMuleRuntime(minversion="3.8.0")
     public void basicSuccess() throws Exception {
         
         
@@ -44,6 +46,7 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
     }
     
     @Test(expected=IOException.class)
+    @MinMuleRuntime(minversion="3.8.0")
     public void wrongProject() throws Exception {
         
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
@@ -54,6 +57,7 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
     }
     
     @Test(expected=IOException.class)
+    @MinMuleRuntime(minversion="3.8.0")
     public void wronTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.getValidHookEndpoint(),

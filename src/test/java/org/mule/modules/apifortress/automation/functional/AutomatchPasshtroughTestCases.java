@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
+import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
 public class AutomatchPasshtroughTestCases extends AbstractTestCase<ApiFortressConnector> {
 
@@ -15,6 +16,7 @@ public class AutomatchPasshtroughTestCases extends AbstractTestCase<ApiFortressC
     }
     
     @Test
+    @MinMuleRuntime(minversion="3.8.0")
     public void basicSuccess() throws Exception {
         
         
