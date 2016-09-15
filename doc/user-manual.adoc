@@ -10,8 +10,7 @@ toc::[]
 
 == Introduction
 
-API Fortress is a world leader in API testing. The API Fortress Anypoint connector allows you to serialize your API responses in Mule and send them to API Fortress
-for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
+API Fortress is a world leader in API testing. The API Fortress Anypoint connector allows you to serialize your API responses in Mule and send them to API Fortress for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
 
 Read through this user guide to understand how to set up and configure a basic flow using the connector.
 
@@ -49,9 +48,9 @@ If you’re currently using an older version of the connector, a small popup app
 . Click the popup and check for available updates. 
 . Click the Connector version checkbox and click *Next* and follow the instructions provided by the user interface. 
 . *Restart* Studio when prompted. 
-. After restarting, when creating a flow and using the connector, if you have several versions of the connector installed, you may be asked which version you would like to use. Choose the version you would like to use.
+. After restarting, when creating a flow and using the connector, if you have several versions of the connector installed you may be asked which version you would like to use. Choose the version you would like to use.
 
-Additionally, we recommend that you keep Studio up to date with its latest version.
+Additionally, we recommend that you keep Studio up to date with the latest version.
 
 == Configuring the Connector Global Element
 
@@ -71,18 +70,18 @@ To use the API Fortress connector in your Mule application, you must configure a
 
 == Using the Connector
 
-The connector can be placed anywhere in a Mule flow. The payload can either be a plain JSON/XML string or a POJO object that will be converted in JSON.
-Other than the payload, connector will require access to the response headers you can configure in the connector instance configuration. The "content-type" header should be
-present, otherwise text/plain will be used.
+The connector can be placed anywhere in a Mule flow. The payload can either be a plain JSON/XML string or a POJO object that will be converted in JSON. 
+
+Other than the payload, the connector will require access to the response headers you can configure in the connector instance configuration. The "content-type" header should be present, otherwise text/plain will be used.
 
 Here's the operations the connector provides.
 
 [width="100a",cols="20a,30a,50a",options="header",]
 |===
 |Field |Description| Parameters
-|*singleTestSynchronous* | The test will run return the results of the test | hook,testId,headers,variables.
+|*singleTestSynchronous* | The test will run and return the results of the test | hook,testId,headers,variables.
 |*singleTestPassthrough* | The test will run and return the received payload | hook,testId,headers,variables.
-|*automatchSynchronous* | The test will run and return tthe results of the test, the "automatch" variable will be used to determine which tests to run | hook,headers,variables.
+|*automatchSynchronous* | The test will run and return the results of the test, the "automatch" variable will be used to determine which tests to run | hook,headers,variables.
 |*automatchTestPassthrough* | The test will run and return the received payload, the "automatch" variable will be used to determine which tests to run | hook,testId,headers,variables.
 
 |===
@@ -91,11 +90,11 @@ The Parameters are:
 [width="100a",cols="20a,80a",options="header",]
 |===
 |Parameter | Description
-|*hook* | the hook URL. You can create hook urls in the API Fortress company dashboard
-|*testId* | for single test run, the ID of the test to run
-|*automatch* | for automatch operations, a path that identifies the URL of the endpoint 
-|*headers* | a map representing the received headers. Typically represented by inboundProperties
-|*variables* | extra variables to be injected in the scope of the test
+|*hook* | The hook URL. You can create hook urls in the API Fortress company dashboard.
+|*testId* | For a single test run, the ID of the test to run.
+|*automatch* | For automatch operations, a path that identifies the URL of the endpoint.
+|*headers* | A map representing the received headers. Typically represented by inboundProperties.
+|*variables* | Extra variables to be injected in the scope of the test.
 
 |=== 
 
@@ -141,7 +140,7 @@ If you are coding a Mavenized Mule application, this XML snippet must be include
 
 [TIP]
 ====
-Inside the `<version>` tags, put the desired version number, the word `RELEASE` for the latest release, or `SNAPSHOT` for the latest available version. The available versions to date are:
+Inside the `<version>` tags put the desired version number, the word `RELEASE` for the latest release, or `SNAPSHOT` for the latest available version. The available versions to date are:
 
 * *1.0.0-RELEASE*
 ====
@@ -156,22 +155,21 @@ add links to demos
 === Simple Passthrough Use Case
 The simplest use case is the validation of a response coming from an endpoint.
 
+. Set up a basic HTTP entry point.
 
-. Set up a basic HTTP entry point
+. Deploy an HTTP request to an endpoint of your choice.
 
-. Deploy an HTTP request to an endpoint of your choice
+. Deploy the API Fortress connector and create a default global configuration, setting silent=true.
 
-. Deploy the API Fortress connector and create a default global configuration, setting silent=true
+. Select the "Single test passthrough" operation.
 
-. Select the "Single test passthrough" operation
+. In your API Fortress account, in the company dashboard, create an API Hook URL for your project. Use it as the "hook" parameter.
 
-. In your API Fortress account, in the company dashboard, create an API Hook URL for your project. Use it as the "hook" parameter
+. In your API Fortress account, in the test details page, obtain a test ID. Use it as the "testId" parameter.
 
-. In your API Fortress account, in the test details page, obtain a test ID. Use it as the "testId" parameter
+. Run the flow and hit the entry point.
 
-. Run the flow and hit the entry point
-
-. In the API Fortress dashboard, verify the result of the test 
+. In the API Fortress dashboard, verify the result of the test.
 
 === Simple Passthrough Use Case - XML
 
