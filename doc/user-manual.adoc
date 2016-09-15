@@ -22,9 +22,8 @@ toc::[]
 
 API Fortress is a world leader in API testing. The API Fortress Anypoint connector allows you to serialize your API responses in Mule and send them to API Fortress
 for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
-//Global rule: the word "connector" should be lower case except when appearing in titles, important URL anchors, and after a MuleSoft tradename such as "Anypoint".
 
-Read through this user guide to understand how to set up and configure a basic flow using the connector. Track feature additions, compatibility, limitations and API version updates with each release of the connector using the link:/release-notes/xyz-connector-release-notes[Connector Release Notes]. Review the connector operations and functionality using the link:/link-to-github.io-or-internal-section[ Technical Reference] alongside the link:https://www.mulesoft.com/exchange#!/?filters=Salesforce&sortBy=rank[demo applications].
+Read through this user guide to understand how to set up and configure a basic flow using the connector.
 
 MuleSoft maintains this connector under the link:/mule-user-guide/v/3.8/anypoint-connectors#connector-categories[_Insert Category_] support policy.
 
@@ -80,8 +79,6 @@ To use the API Fortress connector in your Mule application, you must configure a
 
 |===
 
-//image:<connector>-global-element-props.png[<connector>-config]
-
 == Using the Connector
 
 The connector can be placed anywhere in a Mule flow. The payload can either be a plain JSON/XML string or a POJO object that will be converted in JSON.
@@ -92,13 +89,25 @@ Here's the operations the connector provides.
 
 [width="100a",cols="20a,30a,50a",options="header",]
 |===
-|Field |Description| Options
+|Field |Description| Parameters
 |*singleTestSynchronous* | The test will run return the results of the test | hook,testId,headers,variables.
 |*singleTestPassthrough* | The test will run and return the received payload | hook,testId,headers,variables.
 |*automatchSynchronous* | The test will run and return tthe results of the test, the "automatch" variable will be used to determine which tests to run | hook,headers,variables.
 |*automatchTestPassthrough* | The test will run and return the received payload, the "automatch" variable will be used to determine which tests to run | hook,testId,headers,variables.
 
 |===
+
+The Parameters are:
+[width="100a",cols="20a,80a",options="header",]
+|===
+|Parameter | Description
+|*hook* | the hook URL. You can create hook urls in the API Fortress company dashboard
+|*testId* | for single test run, the ID of the test to run
+|*automatch* | for automatch operations, a path that identifies the URL of the endpoint 
+|*headers* | a map representing the received headers. Typically represented by inboundProperties
+|*variables* | extra variables to be injected in the scope of the test
+
+|=== 
 
 === Connector Namespace and Schema
 
@@ -134,9 +143,9 @@ If you are coding a Mavenized Mule application, this XML snippet must be include
 [source,xml,linenums]
 ----
 <dependency>
-  <groupId></groupId>
-  <artifactId></artifactId>
-  <version></version>
+   <groupId>org.mule.modules</groupId>
+   <artifactId>api-fortress-connector</artifactId>
+   <version>1.0.0-RELEASE</version>
 </dependency>
 ----
 
@@ -144,7 +153,7 @@ If you are coding a Mavenized Mule application, this XML snippet must be include
 ====
 Inside the `<version>` tags, put the desired version number, the word `RELEASE` for the latest release, or `SNAPSHOT` for the latest available version. The available versions to date are:
 
-* *x.y.z*
+* *1.0.0-RELEASE*
 ====
 
 
@@ -154,66 +163,51 @@ add links to demos
 ////
 
 
-=== Example Use Case
-// Limit to 10 steps
-// Do NOT provide a parallel XML walkthrough. Weave any XML details into steps. Also avoid any unnecessary or marginally helpful screenshots
+=== Simple Passthrough Use Case
+The simplest use case is the validation of a response coming from an endpoint.
 
-List potential use cases for this connector. Explain what this example is for
 
-The section should contain a fully functional Mule application as a demo, where the use case is considered. Explain how to create this case with Anypoint Studio Visual editor and what the XML looks like, using a numbered list.
+. Set up a basic HTTP entry point
 
-////
-optional
-[tabs]
------
-[tab,title="Studio Visual Editor"]
-....
-[tab content goes here]
-....
-[tab,title="XML Editor"]
-....
-[tab content goes here]
-....
------
-////
+. Deploy an HTTP request to an endpoint of your choice
 
-=== Example Use Case - XML
+. Deploy the API Fortress connector and create a default global configuration, setting silent=true
+
+. Select the "Single test passthrough" operation
+
+. In your API Fortress account, in the company dashboard, create an API Hook URL for your project. Use it as the "hook" parameter
+
+. In your API Fortress account, in the test details page, obtain a test ID. Use it as the "testId" parameter
+
+. Run the flow and hit the entry point
+
+. In the API Fortress dashboard, verify the result of the test 
+
+=== Simple Passthrough Use Case - XML
 
 Paste this into Anypoint Studio to interact with the example use case application discussed in this guide.
 
 [source,xml,linenums]
 ----
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:api-fortress="http://www.mulesoft.org/schema/mule/api-fortress" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/api-fortress http://www.mulesoft.org/schema/mule/api-fortress/current/mule-api-fortress.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" host="mastiff.apifortress.com" port="443" basePath="/api/examples/retail" doc:name="HTTP Request Configuration"/>
+    <api-fortress:config name="API_Fortress__Configuration" silent="true" dryRun="true" doc:name="API Fortress: Configuration"/>
+    <flow name="muleexampleFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/test" doc:name="HTTP"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
+        <api-fortress:single-test-synchronous config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" testId="57ce873ebbb0fb02e8069d42" doc:name="API Fortress"/>
+    </flow>
+</mule>
 
 ----
-
-
-== Connector Performance
-
-To define the pooling profile for the connector manually, access the *Pooling Profile* tab in the applicable global element for the connector.
-
-For background information on pooling, see link:/mule-user-guide/v/3.8/tuning-performance[Tuning Performance].
-
-
-=== Integration Patterns
-////
-optional
-////
-
-___ recognizes these integration patterns for connecting with other systems…
-
-=== Best Practices
-////
-optional
-////
-To take full advantage of the functionality … +
-
-=== Tips
-////
-optional
-////
-* <Information from Support>
-
-
-== Resources
 
 * Access the link:/release-notes/<System_Name>-connector-release-notes[<System_Name> Connector Release Notes].
