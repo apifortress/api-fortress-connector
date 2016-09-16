@@ -13,4 +13,4 @@ API Fortress 4.0 and newer
 
 ## Installation 
 
-You can access the full documentation <here>.
+You can access the full documentation [here](https://github.com/apifortress/api-fortress-connector/blob/master/doc/user-manual.adoc)
