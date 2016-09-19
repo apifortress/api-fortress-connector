@@ -13,6 +13,9 @@ import org.mule.api.MuleMessage;
 
 public class TestDataBuilder {
 
+	
+	public static final String VALID_HOOK_ENDPOINT="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324";
+	public static final String VALID_TEST_ID="57cd6a4612b87d19658a5b75";
     public static final Map<String,Object> validHeaders = new HashMap<String,Object>();
     static {
         validHeaders.put("content-type", "application/json");
@@ -27,11 +30,11 @@ public class TestDataBuilder {
     }
     
     public static String getValidHookEndpoint(){
-        return "https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324";
+        return VALID_HOOK_ENDPOINT;
     }
     
     public static String getValidTestId(){
-        return "57cd6a4612b87d19658a5b75";
+        return VALID_TEST_ID;
     }
     
     public static void injectInboundProperties(MuleMessage msg,String contentType){
