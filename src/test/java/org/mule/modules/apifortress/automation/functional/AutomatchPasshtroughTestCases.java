@@ -30,4 +30,20 @@ public class AutomatchPasshtroughTestCases extends AbstractTestCase<ApiFortressC
         
         Assert.assertEquals(returnedEvent,data);
     }
+    
+    @Test
+    @MinMuleRuntime(minversion="3.8.0")
+    public void verifyExceptionNoStop() throws Exception {
+        
+        
+        ApiFortressConnector connector = getConnector();
+        String data = TestDataBuilder.loadValidSuccessInputAsString();
+     
+        Object returnedEvent = connector.automatchPassthrough(data,
+                                                                "httpz",
+                                                                TestDataBuilder.getValidAutomatchPath(),
+                                                                TestDataBuilder.validHeaders,TestDataBuilder.emptyMap);
+        
+        Assert.assertEquals(returnedEvent,data);
+    }
 }
