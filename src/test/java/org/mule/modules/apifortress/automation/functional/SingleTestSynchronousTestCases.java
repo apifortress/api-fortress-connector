@@ -4,6 +4,7 @@
 package org.mule.modules.apifortress.automation.functional;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -79,6 +80,61 @@ public class SingleTestSynchronousTestCases
                 TestDataBuilder.validHeaders,
                 TestDataBuilder.emptyMap);
         assert response.getFailuresCount() == 1;
+    }
+    
+
+    @Test
+    public void noHeaders() throws Exception {
+        
+        
+        ApiFortressConnector connector = getConnector();
+     
+        Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
+                                                                TestDataBuilder.getValidHookEndpoint(),
+                                                                TestDataBuilder.getValidTestId(),
+                                                                new HashMap<String,Object>(),
+                                                                TestDataBuilder.emptyMap);
+        
+        assert returnedEvent instanceof ApiFortressResponse;
+        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        Assert.assertEquals(response.getFailuresCount(), 2);
+        Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
+    }
+    
+    @Test
+    public void nullParams() throws Exception {
+        
+        
+        ApiFortressConnector connector = getConnector();
+     
+        Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
+                                                                TestDataBuilder.getValidHookEndpoint(),
+                                                                TestDataBuilder.getValidTestId(),
+                                                                TestDataBuilder.validHeaders,
+                                                                null);
+        
+        assert returnedEvent instanceof ApiFortressResponse;
+        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        Assert.assertEquals(response.getFailuresCount(), 0);
+        Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
+    }
+    
+    @Test
+    public void nullHeaders() throws Exception {
+        
+        
+        ApiFortressConnector connector = getConnector();
+     
+        Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
+                                                                TestDataBuilder.getValidHookEndpoint(),
+                                                                TestDataBuilder.getValidTestId(),
+                                                                null,
+                                                                null);
+        
+        assert returnedEvent instanceof ApiFortressResponse;
+        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        Assert.assertEquals(response.getFailuresCount(), 2);
+        Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
     }
 
 }
