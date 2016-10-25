@@ -20,4 +20,8 @@ public class ApiFortressIOException extends IOException {
 	public ApiFortressIOException(String message){
 		super(message);
 	}
+	
+	public ApiFortressIOException(String message,Exception e){
+		super(message,e);
+	}
 }

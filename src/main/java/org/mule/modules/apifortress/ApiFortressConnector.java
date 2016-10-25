@@ -225,7 +225,7 @@ public class ApiFortressConnector {
         try{
         	return objectMapper.readValue(data,TestExecutionResponse.class);
         }catch(IOException exception){
-        	throw new ApiFortressParseException("Could not parse the response from API Fortress");
+        	throw new ApiFortressParseException("Could not parse the response from API Fortress",exception);
         }
     }
     
@@ -244,7 +244,7 @@ public class ApiFortressConnector {
         try{
         	return objectMapper.readValue(data,TestExecutionResponses.class);
         }catch(IOException exception){
-        	throw new ApiFortressParseException("Could not parse the response from API Fortress");
+        	throw new ApiFortressParseException("Could not parse the response from API Fortress",exception);
         }
     }
     

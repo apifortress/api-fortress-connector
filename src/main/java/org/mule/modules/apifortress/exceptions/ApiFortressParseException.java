@@ -18,4 +18,7 @@ public class ApiFortressParseException extends Exception {
 	public ApiFortressParseException(String message){
 		super(message);
 	}
+	public ApiFortressParseException(String message,Exception e){
+		super(message,e);
+	}
 }
