@@ -15,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -25,6 +24,8 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.mule.modules.apifortress.config.ConnectorConfig;
+import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
+import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -118,11 +119,11 @@ public class ApiFortressClient {
      * @param testId the test id
      * @param synchronous true if the test has to return the result
      * @return The data received from API Fortress, or null if the threshold limiter denied the test execution
-     * @throws IOException when the communication with an API Fortress service instance fails
-     * @throws ClientProtocolException when the handshake between the connector and API Fortress fails
+     * @throws ApiFortressIOException when the communication with an API Fortress service instance fails 
+     * @throws ApiFortressParseException when the connector did not succeed in converting a payload object into JSON
      */
     public String runTest(Object payload, Map<String,Object> headers,Map<String,Object> params,
-                                            URL hook, String testId,boolean synchronous) throws ClientProtocolException, IOException {
+                                            URL hook, String testId,boolean synchronous) throws ApiFortressIOException, ApiFortressParseException {
         counter++;
         /*
          * Limiter. Only multiple of 'threshold' are processed
@@ -132,30 +133,34 @@ public class ApiFortressClient {
         }
         
         final String url = composeUrl(hook.toString(), testId, MODE_RUN, synchronous, silent, dryRun);
-        
-        final HttpPost post = new HttpPost(url);
-        final String body = new JSONObject(
-                buildBodyMap(payload,headers,params)).toString();
-        final StringEntity entity = new StringEntity(body);
-        entity.setContentType(CT_APPLICATION_JSON);
-        post.setEntity(entity);
-        final HttpResponse response = client.execute(post);
-        final int statusCode = response.getStatusLine().getStatusCode();
-        
-        final HttpEntity responseEntity = response.getEntity();
-        final InputStream is = responseEntity.getContent();
-        final String dataBack = IOUtils.toString(is);
-        is.close();
-        EntityUtils.consume(responseEntity);
-        
-        /**
-         * failure when test execution has been rejected for some reason
-         */
-        if (statusCode != 200){
-            throw new IOException("Test execution unsuccessful. Status code="+statusCode);
+        try{
+	        final HttpPost post = new HttpPost(url);
+	        final String body = new JSONObject(
+	                buildBodyMap(payload,headers,params)).toString();
+	        final StringEntity entity = new StringEntity(body);
+	        entity.setContentType(CT_APPLICATION_JSON);
+	        post.setEntity(entity);
+	        final HttpResponse response = client.execute(post);
+	        final int statusCode = response.getStatusLine().getStatusCode();
+	        
+	        final HttpEntity responseEntity = response.getEntity();
+	        final InputStream is = responseEntity.getContent();
+	        final String dataBack = IOUtils.toString(is);
+	        is.close();
+	        EntityUtils.consume(responseEntity);
+	        
+	        /**
+	         * failure when test execution has been rejected for some reason
+	         */
+	        if (statusCode != 200){
+	            throw new ApiFortressIOException("Test execution unsuccessful. Status code="+statusCode);
+	        }
+	        
+	        return dataBack;
+	        
+        }catch(IOException ex){
+        	throw new ApiFortressIOException("Could not communicate with API Fortress. "+ex.getMessage());
         }
-        
-        return dataBack;
     }
 
     /**
@@ -164,9 +169,9 @@ public class ApiFortressClient {
      * @param headers the response headers
      * @param params variables to be injected in the scope of the test
      * @return a map representing the message to be sent to API Fortress
-     * @throws JsonProcessingException  when the payload object cannot be converted into JSON
+     * @throws ApiFortressParseException when the payload object cannot be converted into JSON 
      */
-    public static Map<String,Object> buildBodyMap(Object payload,Map<String,Object> headers,Map<String,Object> params) throws JsonProcessingException {
+    public static Map<String,Object> buildBodyMap(Object payload,Map<String,Object> headers,Map<String,Object> params) throws JsonProcessingException, ApiFortressParseException {
         final HashMap<String, Object> map = new HashMap<>();
         
         /*
@@ -179,8 +184,10 @@ public class ApiFortressClient {
         /*
          * If the payload is an object, then we convert it to a string
          */
-        else {
+        else try{
             map.put(ATTR_PAYLOAD,objectMapper.writeValueAsString(payload));
+        }catch(JsonProcessingException ex){
+        	throw new ApiFortressParseException("Could not transform payload object into JSON");
         }
         /*
          * Content-Type is very important to API Fortress to understand what it has
@@ -275,10 +282,10 @@ public class ApiFortressClient {
      * @param hook the API Hook URL
      * @param synchronous true if the tests need to return the results
      * @return the results from API Fortress or null if the threshold limiter avoided the test execution
-	 * @throws IOException when the communication with an API Fortress service instance fails
-     * @throws ClientProtocolException when the handshake between the connector and API Fortress fails
+     * @throws ApiFortressIOException when the communication with an API Fortress service instance fails 
+     * @throws ApiFortressParseException when the connector did not succeed in converting a payload object into JSON
      */
-    public String runAutomatch(Object payload,Map<String,Object> headers,Map<String,Object> params, URL hook, boolean synchronous, String automatch) throws ClientProtocolException, IOException {
+    public String runAutomatch(Object payload,Map<String,Object> headers,Map<String,Object> params, URL hook, boolean synchronous, String automatch) throws ApiFortressIOException, ApiFortressParseException {
         
         counter++;
         /*
@@ -287,19 +294,29 @@ public class ApiFortressClient {
         if(counter%threshold!=0){
             return null;
         }
-        final String url = composeUrl(hook.toString(), null, MODE_AUTOMATCH, synchronous, silent, dryRun);
-        final HttpPost post = new HttpPost(url);
-        String body = new JSONObject(addUrlToBodyMap(buildBodyMap(payload,headers,params),automatch)).toString();
-        final StringEntity entity = new StringEntity(body);
-        entity.setContentType(CT_APPLICATION_JSON);
-        post.setEntity(entity);
-        final HttpResponse response = client.execute(post);
-        final HttpEntity responseEntity = response.getEntity();
-        final InputStream is = responseEntity.getContent();
-        final String dataBack = IOUtils.toString(is);
-        is.close();
-        EntityUtils.consume(responseEntity);
-        return dataBack;
+        try {
+	        final String url = composeUrl(hook.toString(), null, MODE_AUTOMATCH, synchronous, silent, dryRun);
+	        final HttpPost post = new HttpPost(url);
+	        String body = new JSONObject(addUrlToBodyMap(buildBodyMap(payload,headers,params),automatch)).toString();
+	        final StringEntity entity = new StringEntity(body);
+	        entity.setContentType(CT_APPLICATION_JSON);
+	        post.setEntity(entity);
+	        final HttpResponse response = client.execute(post);
+	        final int statusCode = response.getStatusLine().getStatusCode();
+	        
+	        final HttpEntity responseEntity = response.getEntity();
+	        final InputStream is = responseEntity.getContent();
+	        final String dataBack = IOUtils.toString(is);
+	        is.close();
+	        EntityUtils.consume(responseEntity);
+	        if (statusCode != 200){
+	            throw new ApiFortressIOException("Test execution unsuccessful. Status code="+statusCode);
+	        }
+	        
+	        return dataBack;
+        }catch(IOException ex){
+        	throw new ApiFortressIOException("Could not communicate with API Fortress. "+ex.getMessage());
+        }
     }
     /**
      * Composes the API Fortress URL, based on the settings

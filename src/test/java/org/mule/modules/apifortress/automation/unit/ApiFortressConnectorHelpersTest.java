@@ -3,7 +3,6 @@
  */
 package org.mule.modules.apifortress.automation.unit;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.glassfish.grizzly.memory.ByteBufferManager;
@@ -13,10 +12,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.automation.functional.TestDataBuilder;
+import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.modules.apifortress.responses.TestExecutionResponses;
 
-public class ApiFortressConnectorTest {
+public class ApiFortressConnectorHelpersTest {
 
     
     @Test
@@ -35,7 +35,7 @@ public class ApiFortressConnectorTest {
     }
     
     @Test
-    public void verifyEvaluateResponse() throws IOException{
+    public void verifyEvaluateResponse() throws ApiFortressParseException{
         TestExecutionResponse response = ApiFortressConnector.evaluateResponse("{\"failuresCount\":1}");
         Assert.assertEquals(response.getFailuresCount(), 1);
         
@@ -44,7 +44,7 @@ public class ApiFortressConnectorTest {
 
     }
     @Test
-    public void verifyEvaluateResponses() throws IOException{
+    public void verifyEvaluateResponses() throws ApiFortressParseException{
         TestExecutionResponses responses = ApiFortressConnector.evaluateResponses("[{\"failuresCount\":1}]");
         Assert.assertEquals(responses.size(),1);
         Assert.assertEquals(responses.get(0).getFailuresCount(),1);

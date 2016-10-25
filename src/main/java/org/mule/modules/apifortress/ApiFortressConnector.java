@@ -23,12 +23,12 @@ import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.annotations.param.RefOnly;
 import org.mule.modules.apifortress.config.ConnectorConfig;
+import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
+import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.util.IOUtils;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * The API Fortress connector allows you to send API payloads to API Fortress for testing
@@ -75,7 +75,9 @@ public class ApiFortressConnector {
      * @param headers a map of the headers
      * @param variables extra variables to be injected in the scope of the test
      * @return an ApiFortressResponse instance 
-     * @throws IOException a MalformedUrlException when the provided URL is wrong, an IOException when communication with API Fortress fails.
+     * @throws ApiFortressParseException when the connector couldn't either convert the payload to JSON or couldn't parse the API Fortress response
+     * @throws ApiFortressIOException when the communication with the API Fortress service fails
+     * @throws MalformedURLException when the provided API Hook URL is invalid
      * 
      */
     @Processor
@@ -85,7 +87,7 @@ public class ApiFortressConnector {
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Test ID") @Summary("The test ID. You can retrieve it in the API Fortress interstitial page for the test") String testId,
             @Placement(group = "Settings") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws IOException {
+            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws ApiFortressIOException, ApiFortressParseException, MalformedURLException {
         if(client == null) {
             createApiFortress();
         }
@@ -137,7 +139,9 @@ public class ApiFortressConnector {
      * @param headers a map of the headers
      * @param variables extra variables to be injected in the scope of the test
      * @return an ApiFortressResponses object
-     * @throws IOException a MalformedUrlException when the provided URL is wrong, an IOException when communication with API Fortress fails.
+     * @throws ApiFortressParseException when the connector couldn't either convert the payload to json or couldn't parse the API Fortress response
+     * @throws ApiFortressIOException when the communication with the API Fortress service fails  
+     * @throws MalformedURLException when the provided API Hook URL is invalid
      */
     @Processor
     @Summary("Forwards the payload to the automatch processor which will run tests based on the apif.url inbound attribute and return the evaluation results")
@@ -146,7 +150,7 @@ public class ApiFortressConnector {
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Automatch path") @Summary("The Automatch path API Fortress uses to determine which tests to run") String automatch,
             @Placement(group = "Settings") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws IOException
+            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws ApiFortressParseException, ApiFortressIOException, MalformedURLException
             {
         if(client == null) {
             createApiFortress();
@@ -210,32 +214,38 @@ public class ApiFortressConnector {
      * Evaluates the response from API Fortress for a single test run
      * @param data the response from API Fortress
      * @return an ApiFortressResponse object
-     * @throws JsonParseException when the provided data cannot be parsed as JSON
-     * @throws JsonMappingException when mapping the JSON data to the ApiFortressResponse class fails
+     * @throws ApiFortressParseException when the response from API Fortress could not be parsed
      */
-    public static TestExecutionResponse evaluateResponse(String data) throws IOException{
+    public static TestExecutionResponse evaluateResponse(String data) throws ApiFortressParseException {
         if(data == null){
             final TestExecutionResponse response = new TestExecutionResponse();
             response.setNoRun(true);
             return response;
         }
-        return objectMapper.readValue(data,TestExecutionResponse.class);
+        try{
+        	return objectMapper.readValue(data,TestExecutionResponse.class);
+        }catch(IOException exception){
+        	throw new ApiFortressParseException("Could not parse the response from API Fortress");
+        }
     }
     
     /**
      * Evaluates the response from API Fortress for an automatch run
      * @param data the response from API Fortress
      * @return an ApiFortressResponses object
-     * @throws JsonParseException when the provided data cannot be parsed as JSON
-     * @throws JsonMappingException when mapping the JSON data to the ApiFortressResponses class fails
+     * @throws ApiFortressParseException when the response from API Fortress could not be parsed
      */
-    public static TestExecutionResponses evaluateResponses(String data) throws IOException{
+    public static TestExecutionResponses evaluateResponses(String data) throws ApiFortressParseException{
         if(data == null){
             final TestExecutionResponses response = new TestExecutionResponses();
             response.setNoRun(true);
             return response;
         }
-        return objectMapper.readValue(data,TestExecutionResponses.class);
+        try{
+        	return objectMapper.readValue(data,TestExecutionResponses.class);
+        }catch(IOException exception){
+        	throw new ApiFortressParseException("Could not parse the response from API Fortress");
+        }
     }
     
     /**

@@ -16,7 +16,7 @@ import org.mule.modules.apifortress.ApiFortressClient;
 import org.mule.modules.apifortress.automation.functional.TestDataBuilder;
 
 
-public class ApiFortressClientTest{
+public class ApiFortressClientHelpersTest{
 	
 	@Test
 	public void verifyComposeUrl() throws MalformedURLException{

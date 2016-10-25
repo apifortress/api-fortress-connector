@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
+import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 
 public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortressConnector> {
@@ -31,7 +32,7 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
         Assert.assertEquals(payload,returnedEvent);
     }
     
-    @Test(expected=IOException.class)
+    @Test(expected=ApiFortressIOException.class)
     public void wrongProject() throws Exception {
         
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
@@ -41,7 +42,7 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
                 TestDataBuilder.EMPTY_MAP);
     }
     
-    @Test(expected=IOException.class)
+    @Test(expected=ApiFortressIOException.class)
     public void wrongTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.VALID_HOOK_ENDPOINT,

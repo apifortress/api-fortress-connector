@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
+import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
 import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 
@@ -37,7 +38,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
         Assert.assertEquals(response.get(0).getFailuresCount(), 0);
     }
     
-    @Test(expected=IOException.class)
+    @Test(expected=ApiFortressIOException.class)
     public void wrongProject() throws Exception {
         
         getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),

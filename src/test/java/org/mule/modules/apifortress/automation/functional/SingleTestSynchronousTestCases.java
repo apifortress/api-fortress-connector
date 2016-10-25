@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
+import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 
@@ -39,7 +40,7 @@ public class SingleTestSynchronousTestCases
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
     }
     
-    @Test(expected=IOException.class)
+    @Test(expected=ApiFortressIOException.class)
     public void wrongProject() throws Exception {
         
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
@@ -49,7 +50,7 @@ public class SingleTestSynchronousTestCases
                 TestDataBuilder.EMPTY_MAP);
     }
     
-    @Test(expected=IOException.class)
+    @Test(expected=ApiFortressIOException.class)
     public void wrongTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.VALID_HOOK_ENDPOINT,
