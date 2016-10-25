@@ -5,6 +5,7 @@ package org.mule.modules.apifortress;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 import org.mule.modules.apifortress.config.ConnectorConfig;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -121,11 +124,11 @@ public class ApiFortress {
      * @param testId the test id
      * @param synchronous true if the test has to return the result
      * @return The data received from API Fortress, or null if the threshold limiter denied the test execution
-     * @throws Exception
+     * @throws IOException when the communication with an API Fortress service instance fails
+     * @throws ClientProtocolException when the handshake between the connector and API Fortress fails
      */
     public String runTest(Object payload, Map<String,Object> headers,Map<String,Object> params,
-                                            URL hook, String testId,boolean synchronous)
-            throws Exception {
+                                            URL hook, String testId,boolean synchronous) throws ClientProtocolException, IOException {
         counter++;
         /*
          * Limiter. Only multiple of 'threshold' are processed
@@ -167,10 +170,9 @@ public class ApiFortress {
      * @param headers the response headers
      * @param params variables to be injected in the scope of the test
      * @return a map representing the message to be sent to API Fortress
-     * @throws Exception
+     * @throws JsonProcessingException  when the payload object cannot be converted into JSON
      */
-    public static Map<String,Object> buildBodyMap(Object payload,Map<String,Object> headers,Map<String,Object> params)
-            throws Exception {
+    public static Map<String,Object> buildBodyMap(Object payload,Map<String,Object> headers,Map<String,Object> params) throws JsonProcessingException {
         final HashMap<String, Object> map = new HashMap<>();
         
         /*
@@ -279,9 +281,10 @@ public class ApiFortress {
      * @param hook the API Hook URL
      * @param synchronous true if the tests need to return the results
      * @return the results from API Fortress or null if the threshold limiter avoided the test execution
-     * @throws Exception
+	 * @throws IOException when the communication with an API Fortress service instance fails
+     * @throws ClientProtocolException when the handshake between the connector and API Fortress fails
      */
-    public String runAutomatch(Object payload,Map<String,Object> headers,Map<String,Object> params, URL hook, boolean synchronous, String automatch) throws Exception {
+    public String runAutomatch(Object payload,Map<String,Object> headers,Map<String,Object> params, URL hook, boolean synchronous, String automatch) throws ClientProtocolException, IOException {
         
         counter++;
         /*
