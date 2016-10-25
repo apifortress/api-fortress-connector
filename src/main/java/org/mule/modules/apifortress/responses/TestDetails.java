@@ -27,4 +27,12 @@ class TestDetails{
         this.name = name;
     }
     
+    public boolean equals(Object object){
+    	if(!(object instanceof TestDetails)){
+    		return false;
+    	}
+    	TestDetails o2 = (TestDetails) object;
+    	return id.equals(o2.getId());
+    }
+    
 }

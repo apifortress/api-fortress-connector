@@ -159,5 +159,15 @@ public class TestExecutionResponse{
     }
     
     
+    public boolean equals(Object object){
+    	if(!(object instanceof TestExecutionResponse)){
+    		return false;
+    	}
+    	TestExecutionResponse o2 = (TestExecutionResponse) object;
+    	return companyId==o2.getCompanyId() && projectId==o2.getProjectId() &&
+    			failuresCount == o2.getFailuresCount() && warningsCount == o2.getWarningsCount() &&
+    			location.equals(o2.getLocation()) && test.equals(o2.getTest());
+    }
+    
     
 }

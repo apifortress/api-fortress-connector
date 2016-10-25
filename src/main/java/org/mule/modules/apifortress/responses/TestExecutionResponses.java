@@ -27,9 +27,23 @@ public class TestExecutionResponses extends LinkedList<TestExecutionResponse> {
         this.noRun = noRun;
     }
 
-
-
     public TestExecutionResponses(){
         super();
+    }
+    
+    public boolean equals(Object object){
+    	if (!(object instanceof TestExecutionResponses)){
+    		return false;
+    	}
+    	TestExecutionResponses o2 = (TestExecutionResponses) object;
+    	if(size() != o2.size()){
+    		return false;
+    	}
+    	for(int i=0;i<size();i++){
+    		if(!this.get(i).equals(o2.get(i))){
+    			return false;
+    		}
+    	}
+    	return true;
     }
 }
