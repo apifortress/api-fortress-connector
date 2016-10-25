@@ -90,9 +90,6 @@ public class ApiFortressClient {
     public static final String ATTR_PAYLOAD_RESPONSE = "payload_response";
     public static final String ATTR_HEADERS = "headers";
     
-    public static final List<String> NOT_HEADERS_PREFIXES = Arrays.asList("http.","mule.","apif.");
-
-    
     /**
      * Constructor
      * @param config the connector config. Won't be referenced
