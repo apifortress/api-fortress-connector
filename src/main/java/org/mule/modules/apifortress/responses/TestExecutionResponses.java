@@ -4,6 +4,7 @@
 package org.mule.modules.apifortress.responses;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
@@ -45,5 +46,9 @@ public class TestExecutionResponses extends LinkedList<TestExecutionResponse> {
     		}
     	}
     	return true;
+    }
+    
+    public int hashCode(){
+    	return Objects.hash(this.toArray());
     }
 }

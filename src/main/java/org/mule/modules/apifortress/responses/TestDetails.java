@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
  *
  */
 @JsonAutoDetect
-class TestDetails{
+public class TestDetails{
     String id;
     String name;
     public String getId() {
