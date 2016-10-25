@@ -2131,7 +2131,7 @@ The API Fortress connector allows you to send API payloads to API Fortress for t
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Mule Version</p></td>
-<td class="tableblock halign-center valign-top"><p class="tableblock">3.5.0 or higher</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3.7.0 or higher</p></td>
 </tr>
 </tbody>
 </table>
@@ -2182,7 +2182,7 @@ The global configuration
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">totalConnections</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">max number of simultaneous connections</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Max number of simultaneous connections</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">2</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
@@ -2203,7 +2203,7 @@ The global configuration
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">threshold</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the threshold multiplier. The connector counts the test requests and accepts them only when the counter
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The threshold multiplier. The connector counts the test requests and accepts them only when the counter
 is a multiple of this value. This is done to relax the sampling rate</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">1</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
@@ -2239,7 +2239,7 @@ is a multiple of this value. This is done to relax the sampling rate</p></td>
 </div>
 <div class="paragraph">
 <p>
-Runs a single test and returns the result of the testing
+Runs a single test in a synchronous flavor. The connector will wait for the result of the test and set it as payload
 </p>
 </div>
 <div class="sect3">
@@ -2272,36 +2272,36 @@ Runs a single test and returns the result of the testing
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">payload <span class="icon"><i class="fa fa-envelope"></i></span></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>The current message payload is automatically transformed and injected to this parameter.</strong> <br>the payload, either in the form of string or object</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[payload]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">hook</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the API Hook url</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The API Hook URL. You can retrieve this in your API Fortress company account</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">testId</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the test id</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The test id. It can be found in the test interstitial page, on the API Fortress dashboard</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">headers</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">a map of the headers</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The response headers of the payload it's being tested. 'content-type' is the only mandatory header</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[message.inboundProperties]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">variables</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">extra variables to be injected in the scope of the test</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">#[new java.util.HashMap()]</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 </tbody>
@@ -2322,8 +2322,8 @@ Runs a single test and returns the result of the testing
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="javadocs/org/mule/modules/apifortress/responses/ApiFortressResponse.html">ApiFortressResponse</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">an ApiFortressResponse instance</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="javadocs/org/mule/modules/apifortress/responses/TestExecutionResponse.html">TestExecutionResponse</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">A TestExecutionResponse object, containing the test result information, such as failures count, warnings count and critical failures</p></td>
 </tr>
 </tbody>
 </table>
@@ -2337,8 +2337,8 @@ Runs a single test and returns the result of the testing
 </div>
 <div class="paragraph">
 <p>
-Runs a single test but returns the received event, and therefore operating as a pass through in
-the flow logic
+Runs a single test in an asynchronous flavor. The input payload will be put back in the flow untouched once the operation is done,
+so that further actions can be done on it by the rest of the flow.
 </p>
 </div>
 <div class="sect3">
@@ -2371,36 +2371,36 @@ the flow logic
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">payload <span class="icon"><i class="fa fa-envelope"></i></span></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>The current message payload is automatically transformed and injected to this parameter.</strong> <br>the payload, either in the form of string or object</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[payload]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">hook</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the API Hook url</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The API Hook URL. You can retrieve this in your API Fortress company account</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">testId</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the test id</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The test id. It can be found in the test interstitial page, on the API Fortress dashboard</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">headers</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">a map of the headers</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The response headers of the payload it's being tested. 'content-type' is the only mandatory header</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[message.inboundProperties]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">variables</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">extra variables to be injected in the scope of the test</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">#[new java.util.HashMap()]</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 </tbody>
@@ -2422,7 +2422,7 @@ the flow logic
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the received payload</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The original payload passed to this operation</p></td>
 </tr>
 </tbody>
 </table>
@@ -2436,7 +2436,9 @@ the flow logic
 </div>
 <div class="paragraph">
 <p>
-Runs an automatch testing suite and returns the results
+Runs an automatch testing suite in a synchronous way. The connector will wait for the test results from the API Fortress service and return
+it in the flow as payload.
+The automatch system will determine which tests need to run based on the automatch pattern.
 </p>
 </div>
 <div class="sect3">
@@ -2469,36 +2471,36 @@ Runs an automatch testing suite and returns the results
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">payload <span class="icon"><i class="fa fa-envelope"></i></span></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>The current message payload is automatically transformed and injected to this parameter.</strong> <br>the payload, either in the form of string or object</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[payload]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">hook</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">an API Hook url</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The API Hook URL. You can retrieve this in your API Fortress company account</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">automatch</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the relative path of the tested endpoint, used by automatch to determine which tests to run</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">An automatch pattern is a slash separated string, using "*" as wildcard, that describes the endpoint being tested. It will allow the API Fortress system to determine which tests need to run.</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">headers</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">a map of the headers</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The response headers of the payload it's being tested. 'content-type' is the only mandatory header</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[message.inboundProperties]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">variables</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">extra variables to be injected in the scope of the test</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">#[new java.util.HashMap()]</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 </tbody>
@@ -2519,11 +2521,17 @@ Runs an automatch testing suite and returns the results
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="javadocs/org/mule/modules/apifortress/responses/ApiFortressResponses.html">ApiFortressResponses</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">an ApiFortressResponses object</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="javadocs/org/mule/modules/apifortress/responses/TestExecutionResponses.html">TestExecutionResponses</a></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">A TestExeuctionResponses object, a collection representing all the test execution results for this automatch operation</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_apidoc_reference">APIDoc Reference</h4>
+<div class="paragraph">
+<p>http://apifortress.com/doc/automatch/</p>
+</div>
 <hr>
 </div>
 </div>
@@ -2534,8 +2542,9 @@ Runs an automatch testing suite and returns the results
 </div>
 <div class="paragraph">
 <p>
-Runs an automatch testing suite but returns the received event, and therefore operating as a passthrough
-in the flow logic
+Runs an automatch testing suite in an asynchronous way. the API Fortress service will not return the tests result and run them in background.
+The connector will leave the payload untouched for further operations.
+The automatch system will determine which tests need to run based on the automatch pattern.
 </p>
 </div>
 <div class="sect3">
@@ -2568,36 +2577,36 @@ in the flow logic
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">payload <span class="icon"><i class="fa fa-envelope"></i></span></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><strong>The current message payload is automatically transformed and injected to this parameter.</strong> <br>the payload, either in the form of string or object</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[payload]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">hook</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">an API Hook url</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The API Hook URL. You can retrieve this in your API Fortress company account</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">automatch</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the relative path of the tested endpoint, used by automatch to determine which tests to run</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">An automatch pattern is a slash separated string, using "*" as wildcard, that describes the endpoint being tested. It will allow the API Fortress system to determine which tests need to run</p></td>
 <td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock"><strong>x</strong>&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">headers</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">a map of the headers</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The response headers of the payload it's being tested. 'content-type' is the only mandatory header</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">#[message.inboundProperties]</p></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock">variables</p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">extra variables to be injected in the scope of the test</p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">#[new java.util.HashMap()]</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time</p></td>
+<td class="tableblock halign-left valign-middle"></td>
 <td class="tableblock halign-center valign-middle"><p class="tableblock">&#160;</p></td>
 </tr>
 </tbody>
@@ -2619,10 +2628,16 @@ in the flow logic
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock">the received payload</p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock">The original payload passed to this operation</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_apidoc_reference_2">APIDoc Reference</h4>
+<div class="paragraph">
+<p>http://apifortress.com/doc/automatch/</p>
+</div>
 </div>
 </div>
 </div>

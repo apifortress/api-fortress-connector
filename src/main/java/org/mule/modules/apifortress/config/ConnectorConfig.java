@@ -19,7 +19,7 @@ public class ConnectorConfig {
    
     
     /**
-     * max number of simultaneous connections
+     * Max number of simultaneous connections
      */
     @Configurable
     @Default("2")
@@ -46,7 +46,7 @@ public class ConnectorConfig {
     private int socketTimeout;
     
     /**
-     * the threshold multiplier. The connector counts the test requests and accepts them only when the counter
+     * The threshold multiplier. The connector counts the test requests and accepts them only when the counter
      * is a multiple of this value. This is done to relax the sampling rate 
      */
     @Configurable

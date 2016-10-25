@@ -19,7 +19,7 @@ The API Fortress connector allows you to send API payloads to API Fortress for t
 |======================
 | Requires Mule Enterprise License |  Yes icon:star[]  {nbsp}
 | Requires Entitlement |  No icon:remove[]  {nbsp}
-| Mule Version | 3.5.0 or higher
+| Mule Version | 3.7.0 or higher
 |======================
 
 
@@ -41,10 +41,10 @@ The global configuration
 |======================
 | Name | Java Type | Description | Default Value | Required
 |name | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | The name of this configuration. With this name can be later referenced. | | *x*{nbsp}
-| totalConnections | +++int+++ | +++max number of simultaneous connections+++ |  2 | {nbsp}
+| totalConnections | +++int+++ | +++Max number of simultaneous connections+++ |  2 | {nbsp}
 | connectTimeout | +++int+++ | +++Timeout during connection in seconds+++ |  5 | {nbsp}
 | socketTimeout | +++int+++ | +++Socket timeout in seconds+++ |  30 | {nbsp}
-| threshold | +++int+++ | +++the threshold multiplier. The connector counts the test requests and accepts them only when the counter
+| threshold | +++int+++ | +++The threshold multiplier. The connector counts the test requests and accepts them only when the counter
 is a multiple of this value. This is done to relax the sampling rate+++ |  1 | {nbsp}
 | silent | +++boolean+++ | +++When set to true, no notification will be triggered+++ |  false | {nbsp}
 | dryRun | +++boolean+++ | +++When set to true, events won't be saved in API Fortress+++ |  false | {nbsp}
@@ -63,7 +63,7 @@ is a multiple of this value. This is done to relax the sampling rate+++ |  1 | {
 
 
 +++
-Runs a single test and returns the result of the testing
+Runs a single test in a synchronous flavor. The connector will wait for the result of the test and set it as payload
 +++
 
 
@@ -77,31 +77,32 @@ Runs a single test and returns the result of the testing
 
 
 
-| payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | *The current message payload is automatically transformed and injected to this parameter.* +++<br>the payload, either in the form of string or object+++ | #[payload] | {nbsp}
+| 
+payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON+++ | #[payload] | {nbsp}
 
 
 
 
 | 
-hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++the API Hook url+++ |  | *x*{nbsp}
+hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++The API Hook URL. You can retrieve this in your API Fortress company account+++ |  | *x*{nbsp}
 
 
 
 
 | 
-testId  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++the test id+++ |  | *x*{nbsp}
+testId  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++The test id. It can be found in the test interstitial page, on the API Fortress dashboard+++ |  | *x*{nbsp}
 
 
 
 
 | 
-headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++a map of the headers+++ | #[message.inboundProperties] | {nbsp}
+headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++The response headers of the payload it's being tested. 'content-type' is the only mandatory header+++ | #[message.inboundProperties] | {nbsp}
 
 
 
 
 | 
-variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++extra variables to be injected in the scope of the test+++ | #[new java.util.HashMap()] | {nbsp}
+variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time+++ |  | {nbsp}
 
 
 |======================
@@ -110,7 +111,7 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 [cols=".^40%,.^60%", options="header"]
 |======================
 |Return Java Type | Description
-|+++<a href="javadocs/org/mule/modules/apifortress/responses/ApiFortressResponse.html">ApiFortressResponse</a>+++ | +++an ApiFortressResponse instance+++
+|+++<a href="javadocs/org/mule/modules/apifortress/responses/TestExecutionResponse.html">TestExecutionResponse</a>+++ | +++A TestExecutionResponse object, containing the test result information, such as failures count, warnings count and critical failures+++
 |======================
 
 
@@ -125,8 +126,8 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 
 
 +++
-Runs a single test but returns the received event, and therefore operating as a pass through in
-the flow logic
+Runs a single test in an asynchronous flavor. The input payload will be put back in the flow untouched once the operation is done,
+so that further actions can be done on it by the rest of the flow.
 +++
 
 
@@ -140,31 +141,32 @@ the flow logic
 
 
 
-| payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | *The current message payload is automatically transformed and injected to this parameter.* +++<br>the payload, either in the form of string or object+++ | #[payload] | {nbsp}
+| 
+payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON+++ | #[payload] | {nbsp}
 
 
 
 
 | 
-hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++the API Hook url+++ |  | *x*{nbsp}
+hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++The API Hook URL. You can retrieve this in your API Fortress company account+++ |  | *x*{nbsp}
 
 
 
 
 | 
-testId  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++the test id+++ |  | *x*{nbsp}
+testId  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++The test id. It can be found in the test interstitial page, on the API Fortress dashboard+++ |  | *x*{nbsp}
 
 
 
 
 | 
-headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++a map of the headers+++ | #[message.inboundProperties] | {nbsp}
+headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++The response headers of the payload it's being tested. 'content-type' is the only mandatory header+++ | #[message.inboundProperties] | {nbsp}
 
 
 
 
 | 
-variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++extra variables to be injected in the scope of the test+++ | #[new java.util.HashMap()] | {nbsp}
+variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time+++ |  | {nbsp}
 
 
 |======================
@@ -173,7 +175,7 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 [cols=".^40%,.^60%", options="header"]
 |======================
 |Return Java Type | Description
-|+++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++the received payload+++
+|+++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++The original payload passed to this operation+++
 |======================
 
 
@@ -188,7 +190,9 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 
 
 +++
-Runs an automatch testing suite and returns the results
+Runs an automatch testing suite in a synchronous way. The connector will wait for the test results from the API Fortress service and return
+it in the flow as payload.
+The automatch system will determine which tests need to run based on the automatch pattern.
 +++
 
 
@@ -202,31 +206,32 @@ Runs an automatch testing suite and returns the results
 
 
 
-| payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | *The current message payload is automatically transformed and injected to this parameter.* +++<br>the payload, either in the form of string or object+++ | #[payload] | {nbsp}
+| 
+payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON+++ | #[payload] | {nbsp}
 
 
 
 
 | 
-hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++an API Hook url+++ |  | *x*{nbsp}
+hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++The API Hook URL. You can retrieve this in your API Fortress company account+++ |  | *x*{nbsp}
 
 
 
 
 | 
-automatch  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++the relative path of the tested endpoint, used by automatch to determine which tests to run+++ |  | *x*{nbsp}
+automatch  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++An automatch pattern is a slash separated string, using "*" as wildcard, that describes the endpoint being tested. It will allow the API Fortress system to determine which tests need to run.+++ |  | *x*{nbsp}
 
 
 
 
 | 
-headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++a map of the headers+++ | #[message.inboundProperties] | {nbsp}
+headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++The response headers of the payload it's being tested. 'content-type' is the only mandatory header+++ | #[message.inboundProperties] | {nbsp}
 
 
 
 
 | 
-variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++extra variables to be injected in the scope of the test+++ | #[new java.util.HashMap()] | {nbsp}
+variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time+++ |  | {nbsp}
 
 
 |======================
@@ -235,10 +240,12 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 [cols=".^40%,.^60%", options="header"]
 |======================
 |Return Java Type | Description
-|+++<a href="javadocs/org/mule/modules/apifortress/responses/ApiFortressResponses.html">ApiFortressResponses</a>+++ | +++an ApiFortressResponses object+++
+|+++<a href="javadocs/org/mule/modules/apifortress/responses/TestExecutionResponses.html">TestExecutionResponses</a>+++ | +++A TestExeuctionResponses object, a collection representing all the test execution results for this automatch operation+++
 |======================
 
 
+==== APIDoc Reference
++++http://apifortress.com/doc/automatch/+++
 
 
 ---
@@ -250,8 +257,9 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 
 
 +++
-Runs an automatch testing suite but returns the received event, and therefore operating as a passthrough
-in the flow logic
+Runs an automatch testing suite in an asynchronous way. the API Fortress service will not return the tests result and run them in background.
+The connector will leave the payload untouched for further operations.
+The automatch system will determine which tests need to run based on the automatch pattern.
 +++
 
 
@@ -265,31 +273,32 @@ in the flow logic
 
 
 
-| payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | *The current message payload is automatically transformed and injected to this parameter.* +++<br>the payload, either in the form of string or object+++ | #[payload] | {nbsp}
+| 
+payload icon:envelope[] | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything that can be converted into a JSON+++ | #[payload] | {nbsp}
 
 
 
 
 | 
-hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++an API Hook url+++ |  | *x*{nbsp}
+hook  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++The API Hook URL. You can retrieve this in your API Fortress company account+++ |  | *x*{nbsp}
 
 
 
 
 | 
-automatch  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++the relative path of the tested endpoint, used by automatch to determine which tests to run+++ |  | *x*{nbsp}
+automatch  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>+++ | +++An automatch pattern is a slash separated string, using "*" as wildcard, that describes the endpoint being tested. It will allow the API Fortress system to determine which tests need to run+++ |  | *x*{nbsp}
 
 
 
 
 | 
-headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++a map of the headers+++ | #[message.inboundProperties] | {nbsp}
+headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++The response headers of the payload it's being tested. 'content-type' is the only mandatory header+++ | #[message.inboundProperties] | {nbsp}
 
 
 
 
 | 
-variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++extra variables to be injected in the scope of the test+++ | #[new java.util.HashMap()] | {nbsp}
+variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time+++ |  | {nbsp}
 
 
 |======================
@@ -298,10 +307,12 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 [cols=".^40%,.^60%", options="header"]
 |======================
 |Return Java Type | Description
-|+++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++the received payload+++
+|+++<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>+++ | +++The original payload passed to this operation+++
 |======================
 
 
+==== APIDoc Reference
++++http://apifortress.com/doc/automatch/+++
 
 
 

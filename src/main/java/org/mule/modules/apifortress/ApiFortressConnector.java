@@ -68,16 +68,17 @@ public class ApiFortressConnector {
         }
     }
     /**
-     * Runs a single test and returns the result of the testing
-     * @param payload the payload, either in the form of string or object
-     * @param hook the API Hook url
-     * @param testId the test id
-     * @param headers a map of the headers
-     * @param variables extra variables to be injected in the scope of the test
-     * @return an ApiFortressResponse instance 
-     * @throws ApiFortressParseException when the connector couldn't either convert the payload to JSON or couldn't parse the API Fortress response
-     * @throws ApiFortressIOException when the communication with the API Fortress service fails
-     * @throws MalformedURLException when the provided API Hook URL is invalid
+     * Runs a single test in a synchronous flavor. The connector will wait for the result of the test and set it as payload 
+     * @param payload The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything
+     * that can be converted into a JSON
+     * @param hook The API Hook URL. You can retrieve this in your API Fortress company account
+     * @param testId The test id. It can be found in the test interstitial page, on the API Fortress dashboard
+     * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
+     * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
+     * @return A TestExecutionResponse object, containing the test result information, such as failures count, warnings count and critical failures
+     * @throws ApiFortressParseException When the connector couldn't either convert the payload to JSON or couldn't parse the API Fortress response
+     * @throws ApiFortressIOException When the communication with the API Fortress service fails
+     * @throws MalformedURLException When the provided API Hook URL is invalid
      * 
      */
     @Processor
@@ -97,15 +98,16 @@ public class ApiFortressConnector {
     }
     
     /**
-     * Runs a single test but returns the received event, and therefore operating as a pass through in
-     * the flow logic
-     * @param payload the payload, either in the form of string or object
-     * @param hook the API Hook url
-     * @param testId the test id
-     * @param headers a map of the headers
-     * @param variables extra variables to be injected in the scope of the test
-     * @return the received payload
-     * @throws MalformedURLException when the provided URL is not valid
+     * Runs a single test in an asynchronous flavor. The input payload will be put back in the flow untouched once the operation is done,
+     * so that further actions can be done on it by the rest of the flow.
+     * @param payload The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything
+     * that can be converted into a JSON
+     * @param hook The API Hook URL. You can retrieve this in your API Fortress company account
+     * @param testId The test id. It can be found in the test interstitial page, on the API Fortress dashboard
+     * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
+     * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
+     * @return The original payload passed to this operation
+     * @throws MalformedURLException When the provided URL is not valid
      */
     @Processor
     @Summary("Runs one test against the provided data and will pass through the original payload")
@@ -132,16 +134,21 @@ public class ApiFortressConnector {
     
     
     /**
-     * Runs an automatch testing suite and returns the results
-     * @param payload the payload, either in the form of string or object
-     * @param hook an API Hook url
-     * @param automatch the relative path of the tested endpoint, used by automatch to determine which tests to run
-     * @param headers a map of the headers
-     * @param variables extra variables to be injected in the scope of the test
-     * @return an ApiFortressResponses object
-     * @throws ApiFortressParseException when the connector couldn't either convert the payload to json or couldn't parse the API Fortress response
-     * @throws ApiFortressIOException when the communication with the API Fortress service fails  
-     * @throws MalformedURLException when the provided API Hook URL is invalid
+     * Runs an automatch testing suite in a synchronous way. The connector will wait for the test results from the API Fortress service and return
+     * it in the flow as payload.
+     * The automatch system will determine which tests need to run based on the automatch pattern.
+     * @api.doc http://apifortress.com/doc/automatch/
+     * @param payload The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything
+     * that can be converted into a JSON
+     * @param hook The API Hook URL. You can retrieve this in your API Fortress company account
+     * @param automatch An automatch pattern is a slash separated string, using "*" as wildcard, that describes the endpoint being tested. It will allow the API Fortress system
+     * to determine which tests need to run.
+     * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
+     * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
+     * @return A TestExeuctionResponses object, a collection representing all the test execution results for this automatch operation
+     * @throws ApiFortressParseException When the connector couldn't either convert the payload to json or couldn't parse the API Fortress response
+     * @throws ApiFortressIOException When the communication with the API Fortress service fails  
+     * @throws MalformedURLException When the provided API Hook URL is invalid
      */
     @Processor
     @Summary("Forwards the payload to the automatch processor which will run tests based on the apif.url inbound attribute and return the evaluation results")
@@ -161,16 +168,19 @@ public class ApiFortressConnector {
     }
     
     /**
-     * Runs an automatch testing suite but returns the received event, and therefore operating as a passthrough
-     * in the flow logic
-     * @param payload the payload, either in the form of string or object
-     * @param hook an API Hook url
-     * @param automatch the relative path of the tested endpoint, used by automatch to determine which tests to run
-     * @param headers a map of the headers
-     * @param variables extra variables to be injected in the scope of the test
-     * @return the received payload
-     * @throws MalformedURLException when the provided URL is not valid
-     * @throws Exception a MalformedUrlException when the provided URL is not valid. A generic Exception for any other unknown error
+     * Runs an automatch testing suite in an asynchronous way. the API Fortress service will not return the tests result and run them in background.
+     * The connector will leave the payload untouched for further operations.
+     * The automatch system will determine which tests need to run based on the automatch pattern.
+     * @api.doc http://apifortress.com/doc/automatch/
+     * @param payload The payload, either in the form of string or object. The valid string formats are JSON, XML or plain text. The object can be anything
+     * that can be converted into a JSON
+     * @param hook The API Hook URL. You can retrieve this in your API Fortress company account
+     * @param automatch An automatch pattern is a slash separated string, using "*" as wildcard, that describes the endpoint being tested. It will allow the API Fortress system
+     * to determine which tests need to run
+     * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
+     * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
+     * @return The original payload passed to this operation
+     * @throws MalformedURLException When the provided URL is not valid
      */
     @Processor
     @Summary("Forwards the payload to the automatch process which will run tests based on the apif.url inbound property and return the original payload")
