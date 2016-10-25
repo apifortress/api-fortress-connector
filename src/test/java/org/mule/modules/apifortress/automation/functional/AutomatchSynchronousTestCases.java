@@ -3,6 +3,8 @@
  */
 package org.mule.modules.apifortress.automation.functional;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -10,8 +12,6 @@ import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
-import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
-import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressConnector> {
 
@@ -20,17 +20,16 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
         super(ApiFortressConnector.class);
     }
     @Test
-    @MinMuleRuntime(minversion="3.8.0")
     public void basicSuccess() throws Exception {
         
         
         ApiFortressConnector connector = getConnector();
      
         Object returnedEvent = connector.automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidAutomatchPath(),
-                                                                TestDataBuilder.validHeaders,
-                                                                TestDataBuilder.emptyMap);
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_AUTOMATCH_PATH,
+                                                                TestDataBuilder.VALID_HEADERS,
+                                                                TestDataBuilder.EMPTY_MAP);
         
         Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponses.class));
         TestExecutionResponses response = (TestExecutionResponses)returnedEvent;
@@ -39,35 +38,32 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
     }
     
     @Test(expected=IOException.class)
-    @MinMuleRuntime(minversion="3.8.0")
     public void wrongProject() throws Exception {
         
         getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.getValidHookEndpoint()+"25a",
-                TestDataBuilder.getValidAutomatchPath(),
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT+"25a",
+                TestDataBuilder.VALID_AUTOMATCH_PATH,
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
     }
     
     @Test
-    @MinMuleRuntime(minversion="3.8.0")
     public void noMatch() throws Exception {
         TestExecutionResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.getValidHookEndpoint(),
-                TestDataBuilder.getValidAutomatchPath()+"/2",
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                TestDataBuilder.VALID_AUTOMATCH_PATH+"/2",
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
         Assert.assertEquals(responses.size(),0);
     }
     
     @Test
-    @MinMuleRuntime(minversion="3.8.0")
     public void brokenPayload() throws Exception {
         TestExecutionResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}{",
-                TestDataBuilder.getValidHookEndpoint(),
-                TestDataBuilder.getValidAutomatchPath(),
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                TestDataBuilder.VALID_AUTOMATCH_PATH,
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
         Assert.assertEquals(responses.get(0).getFailuresCount(),0);
     }
 

@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
-import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
 public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressConnector> {
 
@@ -16,7 +15,6 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
     }
     
     @Test
-    @MinMuleRuntime(minversion="3.8.0")
     public void basicSuccess() throws Exception {
         
         
@@ -24,15 +22,14 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
         String data = TestDataBuilder.loadValidSuccessInputAsString();
      
         Object returnedEvent = connector.automatchPassthrough(data,
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidAutomatchPath(),
-                                                                TestDataBuilder.validHeaders,TestDataBuilder.emptyMap);
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_AUTOMATCH_PATH,
+                                                                TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP);
         
         Assert.assertEquals(returnedEvent,data);
     }
     
     @Test
-    @MinMuleRuntime(minversion="3.8.0")
     public void verifyExceptionNoStop() throws Exception {
         
         
@@ -41,8 +38,8 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
      
         Object returnedEvent = connector.automatchPassthrough(data,
                                                                 "httpz",
-                                                                TestDataBuilder.getValidAutomatchPath(),
-                                                                TestDataBuilder.validHeaders,TestDataBuilder.emptyMap);
+                                                                TestDataBuilder.VALID_AUTOMATCH_PATH,
+                                                                TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP);
         
         Assert.assertEquals(returnedEvent,data);
     }

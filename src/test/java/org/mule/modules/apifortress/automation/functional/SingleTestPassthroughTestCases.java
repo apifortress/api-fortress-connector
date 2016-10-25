@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
-import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
 public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortressConnector> {
 
@@ -18,39 +17,36 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
     }
 
     @Test
-    @MinMuleRuntime(minversion="3.8.0")
     public void basicSuccess() throws Exception {
         
         
         ApiFortressConnector connector = getConnector();
         String payload = TestDataBuilder.loadValidSuccessInputAsString();
         Object returnedEvent = connector.singleTestPassthrough(payload,
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidTestId(),
-                                                                TestDataBuilder.validHeaders,
-                                                                TestDataBuilder.emptyMap);
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_TEST_ID,
+                                                                TestDataBuilder.VALID_HEADERS,
+                                                                TestDataBuilder.EMPTY_MAP);
         
         Assert.assertEquals(payload,returnedEvent);
     }
     
     @Test(expected=IOException.class)
-    @MinMuleRuntime(minversion="3.8.0")
     public void wrongProject() throws Exception {
         
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.getValidHookEndpoint()+"25a",
-                TestDataBuilder.getValidTestId(),
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT+"25a",
+                TestDataBuilder.VALID_TEST_ID,
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
     }
     
     @Test(expected=IOException.class)
-    @MinMuleRuntime(minversion="3.8.0")
     public void wrongTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.getValidHookEndpoint(),
-                TestDataBuilder.getValidTestId()+"25a",
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                TestDataBuilder.VALID_TEST_ID+"25a",
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
     }
 }

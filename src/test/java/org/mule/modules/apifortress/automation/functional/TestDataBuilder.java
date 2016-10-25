@@ -16,25 +16,19 @@ public class TestDataBuilder {
 	
 	public static final String VALID_HOOK_ENDPOINT="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324";
 	public static final String VALID_TEST_ID="57cd6a4612b87d19658a5b75";
-    public static final Map<String,Object> validHeaders = new HashMap<String,Object>();
+    public static final Map<String,Object> VALID_HEADERS = new HashMap<String,Object>();
     static {
-        validHeaders.put("content-type", "application/json");
-        validHeaders.put("x-mule", "true");
+        VALID_HEADERS.put("content-type", "application/json");
+        VALID_HEADERS.put("x-mule", "true");
     }
     
-    public static final Map<String,Object> emptyMap = new HashMap<String,Object>();
+    public static final Map<String,Object> EMPTY_MAP = new HashMap<String,Object>();
+    
+    public static final String VALID_AUTOMATCH_PATH = "/test/1";
     
     
     public static String loadValidSuccessInputAsString() throws IOException{
        return IOUtils.toString(TestDataBuilder.class.getResourceAsStream("/success.json"));
-    }
-    
-    public static String getValidHookEndpoint(){
-        return VALID_HOOK_ENDPOINT;
-    }
-    
-    public static String getValidTestId(){
-        return VALID_TEST_ID;
     }
     
     public static void injectInboundProperties(MuleMessage msg,String contentType){
@@ -43,9 +37,5 @@ public class TestDataBuilder {
     }
     public static void injectOutboundProperties(MuleMessage msg,String contentType){
         Mockito.when(msg.getOutboundProperty("x-mule")).thenReturn("true");
-    }
-    
-    public static String getValidAutomatchPath(){
-        return "/test/1";
     }
 }

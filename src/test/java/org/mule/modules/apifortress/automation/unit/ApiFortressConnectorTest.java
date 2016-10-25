@@ -21,7 +21,7 @@ public class ApiFortressConnectorTest {
     
     @Test
     public void verifySanitizeMap() {
-        Assert.assertEquals(ApiFortressConnector.sanitizeMap(TestDataBuilder.validHeaders),TestDataBuilder.validHeaders);
+        Assert.assertEquals(ApiFortressConnector.sanitizeMap(TestDataBuilder.VALID_HEADERS),TestDataBuilder.VALID_HEADERS);
         Assert.assertEquals(ApiFortressConnector.sanitizeMap(null),new HashMap<String,Object>());
     }
     

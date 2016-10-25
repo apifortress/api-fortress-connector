@@ -52,7 +52,7 @@ public class ApiFortressClientTest{
 	@SuppressWarnings("unchecked")
     @Test
 	public void verifyBuildBodyMap() throws Exception{
-	    Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
+	    Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.VALID_HEADERS, TestDataBuilder.EMPTY_MAP);
 	    assertEquals(body.get("payload"), "data");
 	    assertEquals(((Map<String, Object>) body.get("params")).size(), 1);
 	    assertNotNull(((Map<String,Object>)body.get("params")).get("payload_response"));
@@ -61,14 +61,14 @@ public class ApiFortressClientTest{
 	
 	@Test
 	public void verifyAddUrlToBodyMap() throws Exception{
-	   Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
+	   Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.VALID_HEADERS, TestDataBuilder.EMPTY_MAP);
 	   ApiFortressClient.addUrlToBodyMap(body, "/test/1");
 	   assertEquals(body.get("url"), "/test/1");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
     public void verifyAddUrlToBodyMapNull() throws Exception{
-       Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
+       Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.VALID_HEADERS, TestDataBuilder.EMPTY_MAP);
        ApiFortressClient.addUrlToBodyMap(body,null);
     }
 }

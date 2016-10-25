@@ -3,6 +3,8 @@
  */
 package org.mule.modules.apifortress.automation.functional;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -11,8 +13,6 @@ import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
-import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
-import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class SingleTestSynchronousTestCases
         extends AbstractTestCase<ApiFortressConnector> {
@@ -28,10 +28,10 @@ public class SingleTestSynchronousTestCases
         ApiFortressConnector connector = getConnector();
      
         Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidTestId(),
-                                                                TestDataBuilder.validHeaders,
-                                                                TestDataBuilder.emptyMap);
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_TEST_ID,
+                                                                TestDataBuilder.VALID_HEADERS,
+                                                                TestDataBuilder.EMPTY_MAP);
         
         Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
         TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
@@ -40,36 +40,37 @@ public class SingleTestSynchronousTestCases
     }
     
     @Test(expected=IOException.class)
-    @MinMuleRuntime(minversion="3.8.0")
     public void wrongProject() throws Exception {
         
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.getValidHookEndpoint()+"25a",
-                TestDataBuilder.getValidTestId(),
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT+"25a",
+                TestDataBuilder.VALID_TEST_ID,
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
     }
     
     @Test(expected=IOException.class)
-    @MinMuleRuntime(minversion="3.8.0")
     public void wrongTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.getValidHookEndpoint(),
-                TestDataBuilder.getValidTestId()+"25a",
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                TestDataBuilder.VALID_TEST_ID+"25a",
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
     }
     
-    @Test
-    @MinMuleRuntime(minversion="3.8.0")
+    /**
+     * NOTE: this test is invalid due to an issue in the API Fortress cloud engine
+     * 
+     */
+    /*@Test
     public void brokenPayload() throws Exception {
         TestExecutionResponse response = getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}",
-                TestDataBuilder.getValidHookEndpoint(),
-                TestDataBuilder.getValidTestId(),
-                TestDataBuilder.validHeaders,
-                TestDataBuilder.emptyMap);
+                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                TestDataBuilder.VALID_TEST_ID,
+                TestDataBuilder.VALID_HEADERS,
+                TestDataBuilder.EMPTY_MAP);
         Assert.assertEquals(response.getFailuresCount(),1);
-    }
+    }*/
     
 
     @Test
@@ -79,10 +80,10 @@ public class SingleTestSynchronousTestCases
         ApiFortressConnector connector = getConnector();
      
         Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidTestId(),
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_TEST_ID,
                                                                 new HashMap<String,Object>(),
-                                                                TestDataBuilder.emptyMap);
+                                                                TestDataBuilder.EMPTY_MAP);
         
         Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
         TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
@@ -97,9 +98,9 @@ public class SingleTestSynchronousTestCases
         ApiFortressConnector connector = getConnector();
      
         Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidTestId(),
-                                                                TestDataBuilder.validHeaders,
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_TEST_ID,
+                                                                TestDataBuilder.VALID_HEADERS,
                                                                 null);
         
         Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
@@ -115,8 +116,8 @@ public class SingleTestSynchronousTestCases
         ApiFortressConnector connector = getConnector();
      
         Object returnedEvent = connector.singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                                                                TestDataBuilder.getValidHookEndpoint(),
-                                                                TestDataBuilder.getValidTestId(),
+                                                                TestDataBuilder.VALID_HOOK_ENDPOINT,
+                                                                TestDataBuilder.VALID_TEST_ID,
                                                                 null,
                                                                 null);
         
