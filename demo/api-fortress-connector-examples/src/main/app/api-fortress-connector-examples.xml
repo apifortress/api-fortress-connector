@@ -34,23 +34,7 @@ to achieve a success">
     <flow name="automatch_endpoint_response" doc:description="This example is pretty similar to the previous one with a plot twist. The API Fortress configuration does not clearly state which test needs to be run but provides a path instead. The API Fortress cloud will determine the right tests to run.">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/automatch/response" doc:name="HTTP"/>
         <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
-        <api-fortress:automatch-passthrough config-ref="API_Fortress__cloud" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" automatch="/app/api/examples/retail/products" doc:name="API Fortress" variables-ref=""/>
+        <api-fortress:automatch-passthrough config-ref="API_Fortress__cloud" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" automatch="/app/api/examples/retail/products" doc:name="API Fortress" variables-ref="" payload-ref="#[payload]"/>
         <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
-    </flow>
-    <flow name="real_world_local_handling" doc:description="In this complex example, API Fortress connector is configured so that API Fortress cloud will determine which tests to run. Execution is synchronous and the result of the tests execution will be handled by the rest of the flow. In fact, in this example, the flow will split the test results and store them into a MongoDB instance.">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/complex" allowedMethods="GET" doc:name="HTTP"/>
-        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
-        <set-variable variableName="automatch" value="/app/api/examples/retail/products" doc:name="set automatch"/>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <scatter-gather doc:name="Scatter-Gather">
-            <set-payload value="#[payload]"  doc:name="Set Payload"/>
-            <async processingStrategy="Asynchronous_Processing_Strategy" doc:name="Async">
-                <api-fortress:automatch-synchronous config-ref="API_Fortress_dry" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" automatch="#[flowVars.automatch]" doc:name="API Fortress" variables-ref=""/>
-                <splitter expression="#[payload]" doc:name="Splitter"/>
-                <json:object-to-json-transformer doc:name="Object to JSON"/>
-                <mongo:insert-document config-ref="Mongo_DB__Configuration" collection="testme" doc:name="Mongo DB"/>
-            </async>
-        </scatter-gather>
-        <set-payload doc:name="Set Payload" mimeType="application/json" value="#[payload]"/>
     </flow>
 </mule>
