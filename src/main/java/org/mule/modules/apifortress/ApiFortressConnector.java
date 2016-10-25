@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Simone Pezzano - simone@apifortress.com
  *
  */
-@Connector(name = "api-fortress", friendlyName = "API Fortress")
+@Connector(name = "api-fortress", friendlyName = "API Fortress", minMuleVersion = "3.7")
 @RequiresEnterpriseLicense(allowEval = true)
 public class ApiFortressConnector {
 
@@ -81,11 +81,11 @@ public class ApiFortressConnector {
     @Processor
     @Summary("Runs one test against the provided data and will return the result of the evaluation")
     public TestExecutionResponse singleTestSynchronous(
-            @Default("#[payload]") Object payload,
+    		@RefOnly @Default("#[payload]") Object payload,
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Test ID") @Summary("The test ID. You can retrieve it in the API Fortress interstitial page for the test") String testId,
-            @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws IOException {
+            @Placement(group = "Settings") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
+            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws IOException {
         if(client == null) {
             createApiFortress();
         }
@@ -108,11 +108,11 @@ public class ApiFortressConnector {
     @Processor
     @Summary("Runs one test against the provided data and will pass through the original payload")
     public Object singleTestPassthrough(
-    		@Default("#[payload]") Object payload,
+    		@RefOnly @Default("#[payload]") Object payload,
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Test ID") @Summary("The test ID. You can retrieve it in the API Fortress interstitial page for the test") String testId,
-            @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws MalformedURLException
+            @Placement(group = "Settings") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
+            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws MalformedURLException
              {
         if(client == null) {
             createApiFortress();
@@ -142,11 +142,11 @@ public class ApiFortressConnector {
     @Processor
     @Summary("Forwards the payload to the automatch processor which will run tests based on the apif.url inbound attribute and return the evaluation results")
     public TestExecutionResponses automatchSynchronous(
-    		@Default("#[payload]") Object payload,
+    		@RefOnly @Default("#[payload]") Object payload,
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Automatch path") @Summary("The Automatch path API Fortress uses to determine which tests to run") String automatch,
-            @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws IOException
+            @Placement(group = "Settings") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
+            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws IOException
             {
         if(client == null) {
             createApiFortress();
@@ -171,11 +171,11 @@ public class ApiFortressConnector {
     @Processor
     @Summary("Forwards the payload to the automatch process which will run tests based on the apif.url inbound property and return the original payload")
     public Object automatchPassthrough(
-    		@Default("#[payload]") Object payload,
+    		@RefOnly @Default("#[payload]") Object payload,
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Automatch path") @Summary("The Automatch path API Fortress uses to determine which tests to run") String automatch,
-            @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws MalformedURLException{
+            @Placement(group = "Settings") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
+            @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws MalformedURLException{
         if(client == null) {
             createApiFortress();
         }
