@@ -4,6 +4,7 @@
 package org.mule.modules.apifortress.responses;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -167,6 +168,10 @@ public class TestExecutionResponse{
     	return companyId==o2.getCompanyId() && projectId==o2.getProjectId() &&
     			failuresCount == o2.getFailuresCount() && warningsCount == o2.getWarningsCount() &&
     			location.equals(o2.getLocation()) && test.equals(o2.getTest());
+    }
+    
+    public int hashCode(){
+    	return Objects.hash(companyId,projectId,failuresCount,warningsCount,location,test);
     }
     
     

@@ -3,6 +3,8 @@
  */
 package org.mule.modules.apifortress.responses;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 /**
  * 
@@ -33,6 +35,10 @@ class TestDetails{
     	}
     	TestDetails o2 = (TestDetails) object;
     	return id.equals(o2.getId());
+    }
+    
+    public int hashCode(){
+    	return Objects.hash(id,name);
     }
     
 }
