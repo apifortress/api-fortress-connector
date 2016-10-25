@@ -171,7 +171,7 @@ public class ApiFortressClient {
      * @return a map representing the message to be sent to API Fortress
      * @throws ApiFortressParseException when the payload object cannot be converted into JSON 
      */
-    public static Map<String,Object> buildBodyMap(Object payload,Map<String,Object> headers,Map<String,Object> params) throws JsonProcessingException, ApiFortressParseException {
+    public static Map<String,Object> buildBodyMap(Object payload,Map<String,Object> headers,Map<String,Object> params) throws ApiFortressParseException {
         final HashMap<String, Object> map = new HashMap<>();
         
         /*
