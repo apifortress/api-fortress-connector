@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:api-fortress="http://www.mulesoft.org/schema/mule/api-fortress" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/api-fortress http://www.mulesoft.org/schema/mule/api-fortress/current/mule-api-fortress.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <api-fortress:config name="API_Fortress_dry" silent="true" dryRun="true" doc:name="API Fortress: Configuration"/>
+    <api-fortress:config name="API_Fortress__cloud" silent="true" doc:name="API Fortress: Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" host="mastiff.apifortress.com" port="443" basePath="/app/api/examples/retail" doc:name="HTTP Request Configuration"/>
+    <mongo:config name="Mongo_DB__Configuration" username="admin" database="apif" doc:name="Mongo DB: Configuration"/>
+    <asynchronous-processing-strategy name="Asynchronous_Processing_Strategy" maxThreads="2" minThreads="2" threadTTL="100" doc:name="Asynchronous Processing Strategy"/>
+    <flow name="single_test_input" doc:description="In this example API Fortress will run a single test against a JSON payload you POST and return the result of the testing.
+The results of the tests is eventally sent back to the requesting agent.
+You should POST the JSON message:
+{&quot;sugo&quot;:1}
+to achieve a success">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/input" allowedMethods="POST" doc:name="HTTP"/>
+        <api-fortress:single-test-synchronous config-ref="API_Fortress_dry" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" testId="57a9a08abbb0fb4afdf3faf0" doc:name="API Fortress" variables-ref=""/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
+    <flow name="single_test_endpoint_response" doc:description="In this example we run a single test against the response of a payload. API Fortress is using the passthrough operation so that the endpoint payload is preserved and sent back to the requesting agent.">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/endpoint_response" allowedMethods="GET" doc:name="HTTP"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
+        <api-fortress:single-test-passthrough config-ref="API_Fortress__cloud" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324"  doc:name="API Fortress" testId="57ce873ebbb0fb02e8069d42" payload-ref="#[payload]" variables-ref=""/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+    </flow>
+    <flow name="automatch_endpoint_response" doc:description="This example is pretty similar to the previous one with a plot twist. The API Fortress configuration does not clearly state which test needs to be run but provides a path instead. The API Fortress cloud will determine the right tests to run.">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/automatch/response" doc:name="HTTP"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
+        <api-fortress:automatch-passthrough config-ref="API_Fortress__cloud" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" automatch="/app/api/examples/retail/products" doc:name="API Fortress" variables-ref=""/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+    </flow>
+    <flow name="real_world_local_handling" doc:description="In this complex example, API Fortress connector is configured so that API Fortress cloud will determine which tests to run. Execution is synchronous and the result of the tests execution will be handled by the rest of the flow. In fact, in this example, the flow will split the test results and store them into a MongoDB instance.">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/complex" allowedMethods="GET" doc:name="HTTP"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
+        <set-variable variableName="automatch" value="/app/api/examples/retail/products" doc:name="set automatch"/>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <set-payload value="#[payload]"  doc:name="Set Payload"/>
+            <async processingStrategy="Asynchronous_Processing_Strategy" doc:name="Async">
+                <api-fortress:automatch-synchronous config-ref="API_Fortress_dry" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" automatch="#[flowVars.automatch]" doc:name="API Fortress" variables-ref=""/>
+                <splitter expression="#[payload]" doc:name="Splitter"/>
+                <json:object-to-json-transformer doc:name="Object to JSON"/>
+                <mongo:insert-document config-ref="Mongo_DB__Configuration" collection="testme" doc:name="Mongo DB"/>
+            </async>
+        </scatter-gather>
+        <set-payload doc:name="Set Payload" mimeType="application/json" value="#[payload]"/>
+    </flow>
+</mule>
