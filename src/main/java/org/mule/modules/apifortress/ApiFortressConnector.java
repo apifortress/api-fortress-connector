@@ -23,8 +23,8 @@ import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.annotations.param.RefOnly;
 import org.mule.modules.apifortress.config.ConnectorConfig;
-import org.mule.modules.apifortress.responses.ApiFortressResponse;
-import org.mule.modules.apifortress.responses.ApiFortressResponses;
+import org.mule.modules.apifortress.responses.TestExecutionResponse;
+import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.util.IOUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -45,13 +45,13 @@ public class ApiFortressConnector {
      * The global configuration
      */
     @Config
-    ConnectorConfig config;
+    private ConnectorConfig config;
     
     /**
      * The API Fortress logic. As an instance of the connector is deployed for each configuration
      * it is safe to store a reference of this
      */
-    private ApiFortress apiFortress;
+    private ApiFortressClient client;
     
     /**
      * a Jackson object mapper to turn JSON into objects and vice versa
@@ -63,8 +63,8 @@ public class ApiFortressConnector {
      * at constructor time as the config object is injected
      */
     public synchronized void createApiFortress(){
-        if(apiFortress == null) {
-            apiFortress = new ApiFortress(config);
+        if(client == null) {
+            client = new ApiFortressClient(config);
         }
     }
     /**
@@ -80,18 +80,18 @@ public class ApiFortressConnector {
      */
     @Processor
     @Summary("Runs one test against the provided data and will return the result of the evaluation")
-    public ApiFortressResponse singleTestSynchronous(
+    public TestExecutionResponse singleTestSynchronous(
             @Default("#[payload]") Object payload,
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Test ID") @Summary("The test ID. You can retrieve it in the API Fortress interstitial page for the test") String testId,
             @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
             @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws IOException {
-        if(apiFortress == null) {
+        if(client == null) {
             createApiFortress();
         }
         final Object digestedPayload = digestPayload(payload);
         final URL hookUrl = new URL(hook);
-        return evaluateResponse(apiFortress.runTest(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl, testId, true));
+        return evaluateResponse(client.runTest(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl, testId, true));
     }
     
     /**
@@ -114,13 +114,13 @@ public class ApiFortressConnector {
             @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
             @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws MalformedURLException
              {
-        if(apiFortress == null) {
+        if(client == null) {
             createApiFortress();
         }
         final URL hookUrl = new URL(hook);
         final Object digestedPayload = digestPayload(payload);
         try{
-            apiFortress.runTest(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl, testId, false);
+            client.runTest(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl, testId, false);
             
         }catch(Exception e){
             logger.error("Something wrong happened while trying to run the test",e);
@@ -141,19 +141,19 @@ public class ApiFortressConnector {
      */
     @Processor
     @Summary("Forwards the payload to the automatch processor which will run tests based on the apif.url inbound attribute and return the evaluation results")
-    public ApiFortressResponses automatchSynchronous(
+    public TestExecutionResponses automatchSynchronous(
     		@Default("#[payload]") Object payload,
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Automatch path") @Summary("The Automatch path API Fortress uses to determine which tests to run") String automatch,
             @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
             @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws IOException
             {
-        if(apiFortress == null) {
+        if(client == null) {
             createApiFortress();
         }
         final URL hookUrl = new URL(hook);
         final Object digestedPayload = digestPayload(payload);
-        return evaluateResponses(apiFortress.runAutomatch(digestedPayload,sanitizeMap(headers), sanitizeMap(variables), hookUrl,true,automatch));
+        return evaluateResponses(client.runAutomatch(digestedPayload,sanitizeMap(headers), sanitizeMap(variables), hookUrl,true,automatch));
     }
     
     /**
@@ -176,13 +176,13 @@ public class ApiFortressConnector {
             @Placement(group = "Settings") @FriendlyName("Automatch path") @Summary("The Automatch path API Fortress uses to determine which tests to run") String automatch,
             @Placement(group = "Settings") @Default("#[message.inboundProperties]") @FriendlyName("Headers collection") @Summary("The response headers") @RefOnly Map<String,Object>headers,
             @Placement(group = "Settings") @FriendlyName("Extra variables") @Summary("Extra variables to be injected in the scope of the test") @Optional @RefOnly Map<String,Object>variables) throws MalformedURLException{
-        if(apiFortress == null) {
+        if(client == null) {
             createApiFortress();
         }
         final URL hookUrl = new URL(hook);
         final Object digestedPayload = digestPayload(payload);
         try{
-            apiFortress.runAutomatch(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl,true,automatch);
+            client.runAutomatch(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl,true,automatch);
             
         }catch(Exception e){
             logger.error("Something wrong happened while trying to run the test",e);
@@ -213,13 +213,13 @@ public class ApiFortressConnector {
      * @throws JsonParseException when the provided data cannot be parsed as JSON
      * @throws JsonMappingException when mapping the JSON data to the ApiFortressResponse class fails
      */
-    public static ApiFortressResponse evaluateResponse(String data) throws IOException{
+    public static TestExecutionResponse evaluateResponse(String data) throws IOException{
         if(data == null){
-            final ApiFortressResponse response = new ApiFortressResponse();
+            final TestExecutionResponse response = new TestExecutionResponse();
             response.setNoRun(true);
             return response;
         }
-        return objectMapper.readValue(data,ApiFortressResponse.class);
+        return objectMapper.readValue(data,TestExecutionResponse.class);
     }
     
     /**
@@ -229,13 +229,13 @@ public class ApiFortressConnector {
      * @throws JsonParseException when the provided data cannot be parsed as JSON
      * @throws JsonMappingException when mapping the JSON data to the ApiFortressResponses class fails
      */
-    public static ApiFortressResponses evaluateResponses(String data) throws IOException{
+    public static TestExecutionResponses evaluateResponses(String data) throws IOException{
         if(data == null){
-            final ApiFortressResponses response = new ApiFortressResponses();
+            final TestExecutionResponses response = new TestExecutionResponses();
             response.setNoRun(true);
             return response;
         }
-        return objectMapper.readValue(data,ApiFortressResponses.class);
+        return objectMapper.readValue(data,TestExecutionResponses.class);
     }
     
     /**

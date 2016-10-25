@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
  *
  */
 @JsonAutoDetect
-public class ApiFortressResponses extends LinkedList<ApiFortressResponse> {
+public class TestExecutionResponses extends LinkedList<TestExecutionResponse> {
 
     private static final long serialVersionUID = -4901528768696145288L;
     
@@ -29,7 +29,7 @@ public class ApiFortressResponses extends LinkedList<ApiFortressResponse> {
 
 
 
-    public ApiFortressResponses(){
+    public TestExecutionResponses(){
         super();
     }
 }

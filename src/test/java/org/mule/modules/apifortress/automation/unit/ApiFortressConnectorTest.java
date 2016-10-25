@@ -13,8 +13,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.automation.functional.TestDataBuilder;
-import org.mule.modules.apifortress.responses.ApiFortressResponse;
-import org.mule.modules.apifortress.responses.ApiFortressResponses;
+import org.mule.modules.apifortress.responses.TestExecutionResponse;
+import org.mule.modules.apifortress.responses.TestExecutionResponses;
 
 public class ApiFortressConnectorTest {
 
@@ -36,7 +36,7 @@ public class ApiFortressConnectorTest {
     
     @Test
     public void verifyEvaluateResponse() throws IOException{
-        ApiFortressResponse response = ApiFortressConnector.evaluateResponse("{\"failuresCount\":1}");
+        TestExecutionResponse response = ApiFortressConnector.evaluateResponse("{\"failuresCount\":1}");
         Assert.assertEquals(response.getFailuresCount(), 1);
         
         response = ApiFortressConnector.evaluateResponse(null);
@@ -45,7 +45,7 @@ public class ApiFortressConnectorTest {
     }
     @Test
     public void verifyEvaluateResponses() throws IOException{
-        ApiFortressResponses responses = ApiFortressConnector.evaluateResponses("[{\"failuresCount\":1}]");
+        TestExecutionResponses responses = ApiFortressConnector.evaluateResponses("[{\"failuresCount\":1}]");
         Assert.assertEquals(responses.size(),1);
         Assert.assertEquals(responses.get(0).getFailuresCount(),1);
         

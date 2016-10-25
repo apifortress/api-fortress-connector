@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
  *
  */
 @JsonAutoDetect
-class ApiFortressTest{
+class TestDetails{
     String id;
     String name;
     public String getId() {

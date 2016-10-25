@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author Simone Pezzano - simone@apifortress.com
  *
  */
-public class ApiFortressResponse{
+public class TestExecutionResponse{
     
     /**
      * List of critical failures
@@ -45,7 +45,7 @@ public class ApiFortressResponse{
     /**
      * Test details
      */
-    private ApiFortressTest test;
+    private TestDetails test;
     
     /**
      * project id in API Fortress
@@ -103,7 +103,7 @@ public class ApiFortressResponse{
     }
 
 
-    public ApiFortressResponse(){
+    public TestExecutionResponse(){
         super();
     }
 
@@ -129,12 +129,12 @@ public class ApiFortressResponse{
     
     
     
-    public ApiFortressTest getTest() {
+    public TestDetails getTest() {
         return test;
     }
 
 
-    public void setTest(ApiFortressTest test) {
+    public void setTest(TestDetails test) {
         this.test = test;
     }
 

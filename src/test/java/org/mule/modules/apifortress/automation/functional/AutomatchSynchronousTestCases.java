@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
-import org.mule.modules.apifortress.responses.ApiFortressResponses;
+import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
@@ -31,8 +31,8 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
                                                                 TestDataBuilder.validHeaders,
                                                                 TestDataBuilder.emptyMap);
         
-        assert returnedEvent instanceof ApiFortressResponses;
-        ApiFortressResponses response = (ApiFortressResponses)returnedEvent;
+        assert returnedEvent instanceof TestExecutionResponses;
+        TestExecutionResponses response = (TestExecutionResponses)returnedEvent;
         Assert.assertEquals(response.size(), 1);
         Assert.assertEquals(response.get(0).getFailuresCount(), 0);
     }
@@ -51,7 +51,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
     @Test
     @MinMuleRuntime(minversion="3.8.0")
     public void noMatch() throws Exception {
-        ApiFortressResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
+        TestExecutionResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.getValidHookEndpoint(),
                 TestDataBuilder.getValidAutomatchPath()+"/2",
                 TestDataBuilder.validHeaders,
@@ -62,7 +62,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
     @Test
     @MinMuleRuntime(minversion="3.8.0")
     public void brokenPayload() throws Exception {
-        ApiFortressResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}{",
+        TestExecutionResponses responses = getConnector().automatchSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}{",
                 TestDataBuilder.getValidHookEndpoint(),
                 TestDataBuilder.getValidAutomatchPath(),
                 TestDataBuilder.validHeaders,

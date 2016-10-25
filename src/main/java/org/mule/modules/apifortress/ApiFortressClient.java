@@ -5,7 +5,6 @@ package org.mule.modules.apifortress;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Simone Pezzano - simone@apifortress.com
  */
 @Component
-public class ApiFortress {
+public class ApiFortressClient {
     
     /**
      * Jackson object mapper to perform JSON/Object Object/JSON conversions
@@ -98,7 +97,7 @@ public class ApiFortress {
      * Constructor
      * @param config the connector config. Won't be referenced
      */
-    public ApiFortress(ConnectorConfig config) {
+    public ApiFortressClient(ConnectorConfig config) {
         super();
         
         connectionManager = new PoolingHttpClientConnectionManager();

@@ -12,16 +12,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.mule.modules.apifortress.ApiFortress;
+import org.mule.modules.apifortress.ApiFortressClient;
 import org.mule.modules.apifortress.automation.functional.TestDataBuilder;
 
 
-public class ApiFortressTest{
+public class ApiFortressClientTest{
 	
 	@Test
 	public void verifyComposeUrl() throws MalformedURLException{
-		assertEquals(ApiFortress.composeUrl("http://www.foobar.com", "123", "run", true, false, true),"http://www.foobar.com/tests/123/run?sync=true&silent=false&dryrun=true&nosets=true");
-		assertEquals(ApiFortress.composeUrl("http://www.foobar.com", "123", "automatch", true, false, true),"http://www.foobar.com/tests/automatch?sync=true&silent=false&dryrun=true&nosets=true");
+		assertEquals(ApiFortressClient.composeUrl("http://www.foobar.com", "123", "run", true, false, true),"http://www.foobar.com/tests/123/run?sync=true&silent=false&dryrun=true&nosets=true");
+		assertEquals(ApiFortressClient.composeUrl("http://www.foobar.com", "123", "automatch", true, false, true),"http://www.foobar.com/tests/automatch?sync=true&silent=false&dryrun=true&nosets=true");
 	}
 	
 	@Test
@@ -29,13 +29,13 @@ public class ApiFortressTest{
 	    Map<String,Object> withHeaders = new HashMap<String,Object>();
 	    withHeaders.put("content-type", "application/json");
 	    
-	    assertEquals(ApiFortress.getContentType(withHeaders),"application/json");
+	    assertEquals(ApiFortressClient.getContentType(withHeaders),"application/json");
 	    
 	    withHeaders.put("content-type", "text/xml");
-        assertEquals(ApiFortress.getContentType(withHeaders),"text/xml");
+        assertEquals(ApiFortressClient.getContentType(withHeaders),"text/xml");
         
         Map<String,Object> empty = new HashMap<String,Object>();
-	    assertEquals(ApiFortress.getContentType(empty),"text/plain");
+	    assertEquals(ApiFortressClient.getContentType(empty),"text/plain");
 	    
 	}
 	
@@ -44,7 +44,7 @@ public class ApiFortressTest{
 	    Map<String,Object> withHeaders = new HashMap<String,Object>();
         withHeaders.put("content-type", "application/json");
         withHeaders.put("x-test", "true");
-	    Map<String,Object> headers = ApiFortress.extractHeaders(withHeaders);
+	    Map<String,Object> headers = ApiFortressClient.extractHeaders(withHeaders);
 	    assertEquals(headers.size(),2);
 	    assertTrue(headers.containsKey("content-type"));
 	}
@@ -52,7 +52,7 @@ public class ApiFortressTest{
 	@SuppressWarnings("unchecked")
     @Test
 	public void verifyBuildBodyMap() throws Exception{
-	    Map<String,Object> body = ApiFortress.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
+	    Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
 	    assertEquals(body.get("payload"), "data");
 	    assertEquals(((Map<String, Object>) body.get("params")).size(), 1);
 	    assertNotNull(((Map<String,Object>)body.get("params")).get("payload_response"));
@@ -61,14 +61,14 @@ public class ApiFortressTest{
 	
 	@Test
 	public void verifyAddUrlToBodyMap() throws Exception{
-	   Map<String,Object> body = ApiFortress.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
-	   ApiFortress.addUrlToBodyMap(body, "/test/1");
+	   Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
+	   ApiFortressClient.addUrlToBodyMap(body, "/test/1");
 	   assertEquals(body.get("url"), "/test/1");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
     public void verifyAddUrlToBodyMapNull() throws Exception{
-       Map<String,Object> body = ApiFortress.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
-       ApiFortress.addUrlToBodyMap(body,null);
+       Map<String,Object> body = ApiFortressClient.buildBodyMap("data", TestDataBuilder.validHeaders, TestDataBuilder.emptyMap);
+       ApiFortressClient.addUrlToBodyMap(body,null);
     }
 }

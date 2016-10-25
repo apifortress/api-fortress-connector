@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
-import org.mule.modules.apifortress.responses.ApiFortressResponse;
+import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
@@ -44,8 +44,8 @@ public class SingleTestSynchronousTestCases
                                                                 TestDataBuilder.validHeaders,
                                                                 TestDataBuilder.emptyMap);
         
-        assert returnedEvent instanceof ApiFortressResponse;
-        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        assert returnedEvent instanceof TestExecutionResponse;
+        TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 0);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
     }
@@ -74,7 +74,7 @@ public class SingleTestSynchronousTestCases
     @Test
     @MinMuleRuntime(minversion="3.8.0")
     public void brokenPayload() throws Exception {
-        ApiFortressResponse response = getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}",
+        TestExecutionResponse response = getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString()+"}",
                 TestDataBuilder.getValidHookEndpoint(),
                 TestDataBuilder.getValidTestId(),
                 TestDataBuilder.validHeaders,
@@ -95,8 +95,8 @@ public class SingleTestSynchronousTestCases
                                                                 new HashMap<String,Object>(),
                                                                 TestDataBuilder.emptyMap);
         
-        assert returnedEvent instanceof ApiFortressResponse;
-        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        assert returnedEvent instanceof TestExecutionResponse;
+        TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 2);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
     }
@@ -113,8 +113,8 @@ public class SingleTestSynchronousTestCases
                                                                 TestDataBuilder.validHeaders,
                                                                 null);
         
-        assert returnedEvent instanceof ApiFortressResponse;
-        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        assert returnedEvent instanceof TestExecutionResponse;
+        TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 0);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
     }
@@ -131,8 +131,8 @@ public class SingleTestSynchronousTestCases
                                                                 null,
                                                                 null);
         
-        assert returnedEvent instanceof ApiFortressResponse;
-        ApiFortressResponse response = (ApiFortressResponse)returnedEvent;
+        assert returnedEvent instanceof TestExecutionResponse;
+        TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 2);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
     }
