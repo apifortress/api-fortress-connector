@@ -21,8 +21,8 @@ The results of the tests is eventally sent back to the requesting agent.
 You should POST the JSON message:
 {&quot;sugo&quot;:1}
 to achieve a success">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/input" allowedMethods="POST" doc:name="HTTP"/>
-        <api-fortress:single-test-synchronous config-ref="API_Fortress_dry" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" testId="57a9a08abbb0fb4afdf3faf0" doc:name="API Fortress" variables-ref=""/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/input" doc:name="HTTP"/>
+        <api-fortress:single-test-synchronous config-ref="API_Fortress_dry" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" testId="57a9a08abbb0fb4afdf3faf0" doc:name="API Fortress" variables-ref="" payload-ref="#[payload]"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
     <flow name="single_test_endpoint_response" doc:description="In this example we run a single test against the response of a payload. API Fortress is using the passthrough operation so that the endpoint payload is preserved and sent back to the requesting agent.">
