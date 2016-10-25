@@ -5,7 +5,6 @@ package org.mule.modules.apifortress.automation.functional;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.junit.Assert;

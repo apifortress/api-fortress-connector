@@ -3,6 +3,8 @@
  */
 package org.mule.modules.apifortress.automation.functional;
 
+import java.net.MalformedURLException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
@@ -29,18 +31,17 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
         Assert.assertEquals(returnedEvent,data);
     }
     
-    @Test
-    public void verifyExceptionNoStop() throws Exception {
+    @Test(expected=MalformedURLException.class)
+    public void verifyMalformedUrlException() throws Exception {
         
         
         ApiFortressConnector connector = getConnector();
         String data = TestDataBuilder.loadValidSuccessInputAsString();
      
-        Object returnedEvent = connector.automatchPassthrough(data,
-                                                                "httpz",
-                                                                TestDataBuilder.VALID_AUTOMATCH_PATH,
-                                                                TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP);
+        connector.automatchPassthrough(data,
+                                        "httpz",
+                                        TestDataBuilder.VALID_AUTOMATCH_PATH,
+                                        TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP);
         
-        Assert.assertEquals(returnedEvent,data);
     }
 }
