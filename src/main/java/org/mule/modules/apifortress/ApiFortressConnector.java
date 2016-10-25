@@ -259,7 +259,7 @@ public class ApiFortressConnector {
     public static Map<String,Object> sanitizeMap(Map<String,Object> map){
         if(map == null){
             logger.warn("Collection is null");
-            return new HashMap<String,Object>();
+            return new HashMap<>();
         }
         return map;
     }

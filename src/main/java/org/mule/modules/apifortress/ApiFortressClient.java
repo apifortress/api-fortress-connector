@@ -6,10 +6,8 @@ package org.mule.modules.apifortress;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -315,7 +313,7 @@ public class ApiFortressClient {
      */
     public static String composeUrl(String hook, String testId, String mode,
             boolean synchronous, boolean silent, boolean dryRun) {
-        String url = hook.toString() + "/tests/";
+        String url = hook + "/tests/";
         if (mode.equals(MODE_RUN)){
             url += testId + "/";
         }
