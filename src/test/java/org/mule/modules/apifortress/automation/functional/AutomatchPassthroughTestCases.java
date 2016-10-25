@@ -9,9 +9,9 @@ import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
 
-public class AutomatchPasshtroughTestCases extends AbstractTestCase<ApiFortressConnector> {
+public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressConnector> {
 
-    public AutomatchPasshtroughTestCases(){
+    public AutomatchPassthroughTestCases(){
         super(ApiFortressConnector.class);
     }
     
