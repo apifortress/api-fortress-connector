@@ -21,7 +21,7 @@ SingleTestPassthroughTestCases.class,
 AutomatchSynchronousTestCases.class
 })
 
-public class FunctionalTest {
+public class FunctionalTestSuite {
 	
 	@BeforeClass
 	public static void initialiseSuite(){
