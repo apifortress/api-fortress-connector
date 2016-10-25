@@ -11,6 +11,7 @@ import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressConnector> {
 
@@ -31,7 +32,7 @@ public class AutomatchSynchronousTestCases extends AbstractTestCase<ApiFortressC
                                                                 TestDataBuilder.validHeaders,
                                                                 TestDataBuilder.emptyMap);
         
-        assert returnedEvent instanceof TestExecutionResponses;
+        Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponses.class));
         TestExecutionResponses response = (TestExecutionResponses)returnedEvent;
         Assert.assertEquals(response.size(), 1);
         Assert.assertEquals(response.get(0).getFailuresCount(), 0);

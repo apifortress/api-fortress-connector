@@ -5,9 +5,7 @@ package org.mule.modules.apifortress.automation.functional;
 
 import java.io.IOException;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
@@ -17,16 +15,6 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
 
     public SingleTestPassthroughTestCases() {
         super(ApiFortressConnector.class);
-    }
-
-    @Before
-    public void setup() {
-        // TODO
-    }
-
-    @After
-    public void tearDown() {
-        
     }
 
     @Test
@@ -58,7 +46,7 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
     
     @Test(expected=IOException.class)
     @MinMuleRuntime(minversion="3.8.0")
-    public void wronTest() throws Exception {
+    public void wrongTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.getValidHookEndpoint(),
                 TestDataBuilder.getValidTestId()+"25a",

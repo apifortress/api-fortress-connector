@@ -6,30 +6,19 @@ package org.mule.modules.apifortress.automation.functional;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 import org.mule.tools.devkit.ctf.junit.MinMuleRuntime;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class SingleTestSynchronousTestCases
         extends AbstractTestCase<ApiFortressConnector> {
 
     public SingleTestSynchronousTestCases() {
         super(ApiFortressConnector.class);
-    }
-
-    @Before
-    public void setup() {
-        // TODO
-    }
-
-    @After
-    public void tearDown() {
-        // TODO
     }
 
     @Test
@@ -44,7 +33,7 @@ public class SingleTestSynchronousTestCases
                                                                 TestDataBuilder.validHeaders,
                                                                 TestDataBuilder.emptyMap);
         
-        assert returnedEvent instanceof TestExecutionResponse;
+        Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
         TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 0);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
@@ -63,7 +52,7 @@ public class SingleTestSynchronousTestCases
     
     @Test(expected=IOException.class)
     @MinMuleRuntime(minversion="3.8.0")
-    public void wronTest() throws Exception {
+    public void wrongTest() throws Exception {
         getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.getValidHookEndpoint(),
                 TestDataBuilder.getValidTestId()+"25a",
@@ -79,7 +68,7 @@ public class SingleTestSynchronousTestCases
                 TestDataBuilder.getValidTestId(),
                 TestDataBuilder.validHeaders,
                 TestDataBuilder.emptyMap);
-        assert response.getFailuresCount() == 1;
+        Assert.assertEquals(response.getFailuresCount(),1);
     }
     
 
@@ -95,7 +84,7 @@ public class SingleTestSynchronousTestCases
                                                                 new HashMap<String,Object>(),
                                                                 TestDataBuilder.emptyMap);
         
-        assert returnedEvent instanceof TestExecutionResponse;
+        Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
         TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 2);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
@@ -113,7 +102,7 @@ public class SingleTestSynchronousTestCases
                                                                 TestDataBuilder.validHeaders,
                                                                 null);
         
-        assert returnedEvent instanceof TestExecutionResponse;
+        Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
         TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 0);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
@@ -131,7 +120,7 @@ public class SingleTestSynchronousTestCases
                                                                 null,
                                                                 null);
         
-        assert returnedEvent instanceof TestExecutionResponse;
+        Assert.assertThat(returnedEvent, instanceOf(TestExecutionResponse.class));
         TestExecutionResponse response = (TestExecutionResponse)returnedEvent;
         Assert.assertEquals(response.getFailuresCount(), 2);
         Assert.assertEquals(response.getLocation(),"Ashburn, Virginia");
