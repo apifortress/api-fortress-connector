@@ -1,13 +1,13 @@
-= API Fortress> Connector Release Notes
+= API Fortress Connector Release Notes
 :keywords: api, apifortress, testing
 
 
 The API Fortress Anypoint connector allows you to serialize your API responses in Mule and send them to API Fortress
 for testing. Based on the configuration, the results of the tests can be sent back to the Mule flow or be stored in API Fortress for further analysis.
 
-link:/doc/user-manual.adoc[API Fortress Connector User Guide]
+link:api-fortress-connector[API Fortress Connector User Guide]
 
-== 1.0.0 - 09/16/2016
+== 1.0.0 - 10/26/2016
 First release
 
 === Version 1.0.0 Compatibility
@@ -18,3 +18,24 @@ First release
 |Mule Runtime | 3.8.0
 |API Fortress API | v3
 |===
+
+=== Migrating from Older Versions
+This is the first release. There are no previous versions.
+
+=== Features
+1. Single Test Synchronous - send a payload to API Fortress to run a test against it and wait for the test results for further handling.
+2. Single Test Passthrough - send a payload to API Fortress to run a test against it asynchronously. Leave the payload untouched in the flow.
+3. Automatch Synchronous - send a payload to API Fortress to run an automatch suite against it and wait for the results for further handling.
+4. Automatch Passthrough - send a payload to API Fortress to run an automatch suite against it asynchronously. Leave the payload untouched in the flow..
+
+
+=== 1.0.0 Fixed in this Release
+This is the first release. No bug reports.
+
+=== 1.0.0 Known Issues
+No known issues to report.
+
+=== Support Resources
+* Learn how to link:/mule-user-guide/v/3.7/installing-connectors[Install Anypoint Connectors] using Anypoint Exchange.
+* Access MuleSoft’s MuleForge link:http://forum.mulesoft.org/mulesoft[Forum] to pose questions and get help from Mule’s broad community of users.
+* To access MuleSoft’s expert support team, link:http://www.mulesoft.com/mule-esb-subscription[subscribe] to Mule ESB Enterprise and log in to MuleSoft’s link:http://www.mulesoft.com/support-login[Customer Portal].
