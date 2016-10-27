@@ -117,6 +117,10 @@ Other than the payload, the connector will require access to the response header
 
 === Operations
 
+There are four operations available on the connector. They are explained below. From a high level, either the flow can wait for the results for it to use, or continue with the flow without expecting that result.
+
+Automatch is a system API fortress uses to decide which test to run for a partial endpoint URL, by matching a pattern. For example, the /products/shoes endpoint will match the /products/* pattern.
+
 [width="100a",cols="20a,30a,50a",options="header",]
 |===
 |Operation |Description| Parameters
