@@ -76,9 +76,7 @@ The most impressive part of the API Fortress platform is the ability to create i
 
 image:api-fortress-console.png[Console]
 
-We strongly suggest you review the Examples, or create a test using link:http://apifortress.com/doc/writing-your-first-test/[Magic] to quickly learn how to use the GUI composer.
-
-Please refer to link:http://apifortress.com/doc/[the API Fortress documentation] for extensive guides on creating a test with from API Fortress.
+We strongly suggest you review the Examples, or create a test using link:http://apifortress.com/doc/writing-your-first-test/[Magic] to quickly learn how to use the GUI composer. Please refer to link:http://apifortress.com/doc/[the API Fortress documentation] for extensive guides on creating a test with from API Fortress.
 
 === Collect the Information You Will Need
 You will need the following information to use the API Fortress API to run tests:
