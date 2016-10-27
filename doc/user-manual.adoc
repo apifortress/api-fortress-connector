@@ -23,18 +23,27 @@ This document assumes that you are familiar with Mule,
 link:https://docs.mulesoft.com/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors], and
 link:https://docs.mulesoft.com/mule-fundamentals/v/3.8/anypoint-studio-essentials[Anypoint Studio Essentials]. To increase your familiarity with Studio, consider completing a link:https://docs.mulesoft.com/mule-fundamentals/v/3.8/basic-studio-tutorial[Anypoint Studio Tutorial]. This page requires some basic knowledge of link:/mule-fundamentals/v/3.8/mule-concepts[Mule Concepts], link:/mule-fundamentals/v/3.8/elements-in-a-mule-flow[Elements in a Mule Flow], and link:/mule-fundamentals/v/3.8/global-elements[Global Elements].
 
+To use the API Fortress connector you must have the following:
+
+* Anypoint Studio
+* A paid or trial API Fortress account
 
 [[requirements]]
 === Hardware and Software Requirements
 
 For hardware and software requirements, please visit the link:https://docs.mulesoft.com/mule-user-guide/v/3.8/hardware-and-software-requirements[Hardware and Software Requirements] page.
 
-
-
 === Compatibility
 
-*Versions* +
-Mule 3.8.0 or newer
+[width="100a",cols="50a,50a",options="header",]
+|===
+|Application/Service | Version
+|Anypoint Studio | 6.0 or higher
+|Mule Runtime EE | 3.8.x or higher
+|Java | 1.7 or higher
+|API Fortress account | trial or higher
+
+|===
 
 == Installing the Connector
 
@@ -52,49 +61,88 @@ If you’re currently using an older version of the connector, a small popup app
 
 Additionally, we recommend that you keep Studio up to date with the latest version.
 
+
+== Before using the connector
+Before you start using the connector (other than running the demo) here's a few thing you should know.
+
+=== Register/Upgrade an API Fortress account
+The trial account will provide you access to most API Fortress features, including the API that is required to run the connector. The evaluation lasts 30 days. Register your account for free at link:https://mastiff.apifortress.com[mastiff.apifortress.com].
+
+Refer to link:http://apifortress.com[apifortress.com] for pricing and options.
+
+=== Build a test for your API
+Build a test using the API Fortress visual composer. As the payload will be forwarded from the Mule engine, the test is not required to perform the I/O operation to retrieve the resource so it will generally contain only assertions
+evaluting the content of the `payload` variable.
+
+A good way to get started (even though not required) is using the HTTP console to either perform a test call (when available) or pasting an example payload in the "Response" tab to get suggestions during composition.
+image:api-fortress-console.png[Console]
+
+Once this is done, building a test using the visual composer is pretty straight forward.
+image:api-fortress-composer.png[Composer]
+
+Please refer to link:http://apifortress.com/doc/[the API Fortress documentation] for extensive guides on how to get the best results from API Fortress.
+
+=== Collect the information you will need
+To use the API Fortress API to run tests, you will need the following information:
+
+* *API Hook URL* : API Fortress generated URLs representing a project. You can generate one by accessing your company page. By simply having knowledge of this URL, you can access all the operations that do not expose sensitive data, including running tests
+image:api-fortress-hooks.png[API Hooks]
+
+* *Test ID* :  when running a single test, you will need the test ID, which can be retrieved in the test interstitial page
+image:api-fortress-interstitial.png[Interstitial page]
+
+
+
 == Configuring the Connector Global Element
 
 To use the API Fortress connector in your Mule application, you must configure a global API Fortress element that can be used by the API Fortress connector (read more about  link:https://docs.mulesoft.com/mule-fundamentals/v/3.8/global-elements[Global Elements]). The API Fortress connector offers the following global configuration:
 [width="100a",cols="50a,50a",options="header",]
 |===
 |Field |Description
-|*connectTimeout* | Timeout to connect in seconds.
-|*socketTimeout* | Socket timeout in seconds.
-|*totalConnections* | Maximum number of parallel HTTP connections.
-|*threshold* | Run a test after a certain number of requests have been received.
+|*connectTimeout* | Timeout to connect in seconds. Increase it if your connection to the API Fortress instance has long latencies.
+|*socketTimeout* | Socket timeout in seconds. Increase it if your connection to the API Fortress instance is slow.
+|*totalConnections* | Maximum number of parallel HTTP connections. A high number will effect resource consumption. A small number will slow the connector down
+|*threshold* | Run a test after a certain number of requests have been received. Used to reduce the samples
 |*silent* | True if the API Fortress cloud shouldn't send failure notifications.
 |*dryRun* | True if the API Fortress cloud shouldn't store test results.
 
-
 |===
 
+image:api-fortress-global-configuration.png[Global Configuration]
+
+
+
+
 == Using the Connector
+
 
 The connector can be placed anywhere in a Mule flow. The payload can either be a plain JSON/XML string or a POJO object that will be converted in JSON. 
 
 Other than the payload, the connector will require access to the response headers you can configure in the connector instance configuration. The "content-type" header should be present, otherwise text/plain will be used.
 
-Here's the operations the connector provides.
+=== Operations
 
 [width="100a",cols="20a,30a,50a",options="header",]
 |===
-|Field |Description| Parameters
-|*singleTestSynchronous* | The test will run and return the results of the test | hook,testId,headers,variables.
-|*singleTestPassthrough* | The test will run and return the received payload | hook,testId,headers,variables.
-|*automatchSynchronous* | The test will run and return the results of the test, the "automatch" variable will be used to determine which tests to run | hook,headers,variables.
-|*automatchTestPassthrough* | The test will run and return the received payload, the "automatch" variable will be used to determine which tests to run | hook,testId,headers,variables.
+|Operation |Description| Parameters
+|*single test synchronous* | The serialized API call will be forwarded to the API Fortress engine and one test will be run against it. Eventually, the connector will wait for the result of the test and set it as payload | payload, hook,testId,headers,variables.
+|*single test passthrough* | Will perform the same operation as the synchronous mode, but will not wait for the test results and release the flow as soon as it gets an acceptance confirmation from API Fortress. The original payload is preserved in the flow | payload, hook,testId,headers,variables.
+|*automatch synchronous* | The serialized API call will be forwarded to the API Fortress engine that will choose which tests to run based on the 'automatch' field. Eventually, the connector will wait for the result of the tests and set them as payload | payload, hook,headers,variables.
+|*automatch passthrough* | Will perform the same operation as the synchronous mode, but will not wait for the test results and release the flow as soon as it gets an acceptance confirmation from API Fortress. The original payload is preserved in the flow | payload, hook,testId,headers,variables.
 
 |===
 
-The Parameters are:
-[width="100a",cols="20a,80a",options="header",]
+=== Parameters
+
+[width="100a",cols="10a,70a,10a,10a",options="header",]
 |===
-|Parameter | Description
-|*hook* | The hook URL. You can create hook urls in the API Fortress company dashboard.
-|*testId* | For a single test run, the ID of the test to run.
-|*automatch* | For automatch operations, a path that identifies the URL of the endpoint.
-|*headers* | A map representing the received headers. Typically represented by inboundProperties.
-|*variables* | Extra variables to be injected in the scope of the test.
+|Parameter | Description | Default | Required
+|*payload* | A reference to the payload to be tested. I generally is made of text, but can be a POJO as well | `#[payload]` | yes 
+|*hook* | the API Hook URL identifying one project, as described in the chapter "Collect the information you will need" | | yes 
+|*testId* | For a single test run, the ID of the test to run. It can be retrieved in a test interstitial page, as described in the "Collect the information you will need" | | yes  
+|*automatch* | For automatch operations, a path that identifies the URL of the endpoint. Please refer to the link:http://apifortress.com/doc/automatch/[Automatch documentation] | | yes
+|*headers* | an API response payload is generally decorated by multiple headers you might want to test. Though not required, it is strongly suggested to provide at least the 'content-type' header | `#[message.inboundProperties]` | no 
+|*variables* | Extra variables to be injected in the scope of the test. Examples could be the server name, the flow name, or the local time. The variables will be accessible to the test just like the `payload` variable | empty | no
 
 |=== 
 
@@ -112,12 +160,12 @@ If you are manually coding the Mule application in Studio's XML editor or other 
 ----
 <mule xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:connector="http://www.mulesoft.org/schema/mule/connector"
+      xmlns:api-fortress="http://www.mulesoft.org/schema/mule/api-fortress"
       xsi:schemaLocation="
                http://www.mulesoft.org/schema/mule/core
                http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-               http://www.mulesoft.org/schema/mule/connector
-               http://www.mulesoft.org/schema/mule/connector/current/mule-connector.xsd">
+               http://www.mulesoft.org/schema/mule/api-fortress
+               http://www.mulesoft.org/schema/mule/connector/current/api-fortress.xsd">
 
       <!-- put your global configuration elements and flows here -->
 
@@ -153,23 +201,39 @@ add links to demos
 
 
 === Simple Passthrough Use Case
+
+Before you implement this example, make sure you read and applied the "Before using the connector" chapter.
+
+Here's the user case we are going to implement in the Anypoint Studio UI.
+image:api-fortress-use-case-1.png[The flow]
+
 The simplest use case is the validation of a response coming from an endpoint.
 
-. Set up a basic HTTP entry point.
+. Set up a basic HTTP entry point by dragging the HTTP connector from the palette to your canvas. Create a global configuration with the default values (port 8081)
 
-. Deploy an HTTP request to an endpoint of your choice.
+. Drag and drop on the canvas an HTTP request connector as second step of the flow. Configure the instance to perform an HTTP call to an API endpoint of your choice.
+Refer to link:https://docs.mulesoft.com/mule-user-guide/v/3.8/http-request-connector[the HTTP request connector documentation]
 
-. Deploy the API Fortress connector and create a default global configuration, setting silent=true.
+. Drag from the palette API Fortress connector and drop it as 3rd element. Create the default global configuration, setting silent=true.
+
+image:api-fortress-use-case-2.png[Global configuration example]
 
 . Select the "Single test passthrough" operation.
+
+. Leave the headers input as default
 
 . In your API Fortress account, in the company dashboard, create an API Hook URL for your project. Use it as the "hook" parameter.
 
 . In your API Fortress account, in the test details page, obtain a test ID. Use it as the "testId" parameter.
 
-. Run the flow and hit the entry point.
+image:api-fortress-use-case-3.png[Connector configuration]
 
-. In the API Fortress dashboard, verify the result of the test.
+. Run the flow in your Mule engine
+
+. Hit the url `http://localhost:8081` with an HTTP client of your choice. The flow should return the payload provided by the second HTTP connector 
+
+. In the API Fortress project dashboard, verify the test has run and produced a report
+
 
 === Simple Passthrough Use Case - XML
 
@@ -180,7 +244,7 @@ Paste this into Anypoint Studio to interact with the example use case applicatio
 <?xml version="1.0" encoding="UTF-8"?>
 
 <mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:api-fortress="http://www.mulesoft.org/schema/mule/api-fortress" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:spring="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -188,14 +252,20 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/api-fortress http://www.mulesoft.org/schema/mule/api-fortress/current/mule-api-fortress.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" host="mastiff.apifortress.com" port="443" basePath="/api/examples/retail" doc:name="HTTP Request Configuration"/>
-    <api-fortress:config name="API_Fortress__Configuration" silent="true" dryRun="true" doc:name="API Fortress: Configuration"/>
-    <flow name="muleexampleFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/test" doc:name="HTTP"/>
+    <api-fortress:config name="API_Fortress__Configuration" silent="true" dryRun="false" doc:name="API Fortress: Configuration"/>
+    <flow name="single_test_endpoint_response" doc:description="In this example we run a single test against the response of a payload. API Fortress is using the passthrough operation so that the endpoint payload is preserved and sent back to the requesting agent.">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/endpoint_response" allowedMethods="GET" doc:name="HTTP"/>
         <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
-        <api-fortress:single-test-synchronous config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" testId="57ce873ebbb0fb02e8069d42" doc:name="API Fortress"/>
+        <api-fortress:single-test-passthrough config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324"  doc:name="API Fortress" testId="57ce873ebbb0fb02e8069d42" />
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
     </flow>
 </mule>
 
 ----
+
+== Resources
+* Learn more about working with link:https://docs.mulesoft.com/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors].
+
+* For additional documentation on the API Fortress platform, visit our link:http://apifortress.com/doc/[documentation portal].
 
 * Access the link:https://docs.mulesoft.com/release-notes/api-fortress-connector-release-notes[API Fortress Connector Release Notes].
