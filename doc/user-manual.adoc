@@ -72,9 +72,11 @@ Refer to link:http://apifortress.com/pricing[apifortress.com] for pricing option
 === Build a Test for Your API
 Build a test using the API Fortress visual composer. Since the payload will be forwarded from the Mule engine, the test is not required to perform I/O operations to retrieve the resource. Therefore, the test will generally only contain assertions evaluting the content of the `payload` variable.
 
-The most impressive part of the API Fortress platform is the ability to create intelligent tests without writing any code. The simplify this we suggest using the HTTP console. This facilitates the process of writing a test because the GUI composer will make suggestions during composition. To do this either make a call with the console, or paste an example payload in the "Response" tab
+The most impressive part of the API Fortress platform is the ability to create intelligent tests without writing any code. The simplify this we suggest using the HTTP console. This facilitates the process of writing a test because the GUI composer will make suggestions during composition. To do this either make a call with the console, or paste an example payload in the "Response" tab.
 
-We strongly suggest you review the Examples, or create a test using 'Magic,' to quickly how to use the GUI composer.
+image:api-fortress-console.png[Console]
+
+We strongly suggest you review the Examples, or create a test using link:http://apifortress.com/doc/writing-your-first-test/[Magic] to quickly learn how to use the GUI composer.
 
 Please refer to link:http://apifortress.com/doc/[the API Fortress documentation] for extensive guides on creating a test with from API Fortress.
 
