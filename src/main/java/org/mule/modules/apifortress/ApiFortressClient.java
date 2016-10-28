@@ -264,7 +264,7 @@ public class ApiFortressClient {
      * @return the retrieved content-type
      */
     public static String getContentType(Map<String,Object> headers) {
-        String contentType = (String) headers.get("content-type");
+        String contentType = (String) headers.get(HEADER_CONTENT_TYPE);
         if(contentType == null){
             contentType = CT_TEXT_PLAIN;
         } else
