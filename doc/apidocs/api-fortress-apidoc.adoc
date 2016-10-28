@@ -19,7 +19,7 @@ The API Fortress connector allows you to send API payloads to API Fortress for t
 |======================
 | Requires Mule Enterprise License |  Yes icon:star[]  {nbsp}
 | Requires Entitlement |  No icon:remove[]  {nbsp}
-| Mule Version | 3.7.0 or higher
+| Mule Version | 3.8.0 or higher
 |======================
 
 
@@ -240,7 +240,7 @@ variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.
 [cols=".^40%,.^60%", options="header"]
 |======================
 |Return Java Type | Description
-|+++<a href="javadocs/org/mule/modules/apifortress/responses/TestExecutionResponses.html">TestExecutionResponses</a>+++ | +++A TestExeuctionResponses object, a collection representing all the test execution results for this automatch operation+++
+|+++<a href="javadocs/org/mule/modules/apifortress/responses/TestExecutionResponses.html">TestExecutionResponses</a>+++ | +++A TestExecutionResponses object, a collection representing all the test execution results for this automatch operation+++
 |======================
 
 

@@ -144,7 +144,7 @@ public class ApiFortressConnector {
      * to determine which tests need to run.
      * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
      * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
-     * @return A TestExeuctionResponses object, a collection representing all the test execution results for this automatch operation
+     * @return A TestExecutionResponses object, a collection representing all the test execution results for this automatch operation
      * @throws ApiFortressParseException When the connector couldn't either convert the payload to json or couldn't parse the API Fortress response
      * @throws ApiFortressIOException When the communication with the API Fortress service fails  
      * @throws MalformedURLException When the provided API Hook URL is invalid

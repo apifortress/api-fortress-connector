@@ -23,7 +23,7 @@ public class Config {
      */
     @Configurable
     @Default("2")
-    @Summary("Number of symultaneous outbound HTTP connections")
+    @Summary("Number of simultenous outbound HTTP connections")
     @Placement(tab="General",group="Connection")
     private int totalConnections;
 
