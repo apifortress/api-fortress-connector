@@ -1,5 +1,36 @@
-/target/
-/.settings/
-/.classpath
-/.factorypath
-/.project
+#Linux
+*~
+
+#Mac OS X
+.DS_Store
+
+# Maven
+target/
+
+# Java
+*.class
+*.jar
+*.war
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# eclipse
+bin/
+.classpath
+.settings/
+.project
+.factorypath
+.metadata
+
+# Mule Studio
+.studio
+demo/**/catalog
+
+*.log
+*automation-credentials.properties
+*.pem
+muleLicenseKey.lic
