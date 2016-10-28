@@ -7,12 +7,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressClient;
 import org.mule.modules.apifortress.automation.functional.TestDataBuilder;
+import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 
 
 public class ApiFortressClientHelpersTest{
@@ -56,6 +58,11 @@ public class ApiFortressClientHelpersTest{
 	    assertEquals(((Map<String, Object>) body.get("params")).size(), 1);
 	    assertNotNull(((Map<String,Object>)body.get("params")).get("payload_response"));
 	    assertEquals(((Map<String,Object>)((Map<String,Object>)((Map<String,Object>)body.get("params")).get("payload_response")).get("headers")).size(),2);
+	}
+	
+    @Test(expected=ApiFortressParseException.class)
+	public void verifyBuildBodyMapFailure() throws Exception{
+	    ApiFortressClient.buildBodyMap(new BufferedInputStream(null), TestDataBuilder.VALID_HEADERS, TestDataBuilder.EMPTY_MAP);
 	}
 	
 	@Test

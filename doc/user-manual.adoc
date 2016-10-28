@@ -20,8 +20,8 @@ MuleSoft maintains this connector under the link:https://docs.mulesoft.com/mule-
 == Prerequisites
 
 This document assumes that you are familiar with Mule,
-link:https://docs.mulesoft.com/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors], and
-link:https://docs.mulesoft.com/mule-fundamentals/v/3.8/anypoint-studio-essentials[Anypoint Studio Essentials]. To increase your familiarity with Studio consider completing a link:https://docs.mulesoft.com/mule-fundamentals/v/3.8/basic-studio tutorial[Anypoint Studio Tutorial]. This page requires some basic knowledge of link:/mule-fundamentals/v/3.8/mule concepts[Mule Concepts], link:/mule-fundamentals/v/3.8/elements-in-a-mule-flow[Elements in a Mule Flow], and link:/mule fundamentals/v/3.8/global-elements[Global Elements].
+link:/mule-user-guide/v/3.8/anypoint-connectors[Anypoint Connectors], and
+link:/mule-fundamentals/v/3.8/anypoint-studio-essentials[Anypoint Studio Essentials]. To increase your familiarity with Studio, consider completing a link:/mule-fundamentals/v/3.8/basic-studio-tutorial[Anypoint Studio Tutorial]. This page requires some basic knowledge of link:/mule-fundamentals/v/3.8/mule-concepts[Mule Concepts], link:/mule-fundamentals/v/3.8/elements-in-a-mule-flow[Elements in a Mule Flow], and link:/mule-fundamentals/v/3.8/global-elements[Global Elements].
 
 To use the API Fortress connector you must have the following:
 
@@ -125,9 +125,9 @@ Automatch is a system API fortress uses to decide which test to run for a partia
 |===
 |Operation |Description| Parameters
 |*single test synchronous* | The serialized API call will be forwarded to the API Fortress engine, and one test will be run against it. The connector will wait for the result of the test and set it as payload. | payload, hook,testId,headers,variables.
-|*single test passthrough* | Will perform the same operation as the synchronous mode, but will not wait for the test results. It will continue the flow as soon as it gets an acceptance confirmation from API Fortress. The original payload is preserved in the flow. | payload, hook,testId,headers,variables.
+|*single test passthrough* | Will perform the same operation as the synchronous mode, but will not wait for the test results. It will continue the flow as soon as it gets an acceptance confirmation from API Fortress. The original payload is preserved in the flow. | payload, hook,testId,headers,variables,failOnError.
 |*automatch synchronous* | The serialized API call will be forwarded to the API Fortress engine that will choose which tests to run based on the 'automatch' field. Eventually, the connector will wait for the result of the tests and set them as payload. | payload, hook,headers,variables.
-|*automatch passthrough* | Will perform the same operation as the synchronous mode, but will not wait for the test results. It will continue the flow as soon as it gets an acceptance confirmation from API Fortress. The original payload is preserved in the flow. | payload, hook,testId,headers,variables.
+|*automatch passthrough* | Will perform the same operation as the synchronous mode, but will not wait for the test results. It will continue the flow as soon as it gets an acceptance confirmation from API Fortress. The original payload is preserved in the flow. | payload, hook,testId,headers,variables,failOnError.
 
 |===
 
@@ -142,6 +142,7 @@ Automatch is a system API fortress uses to decide which test to run for a partia
 |*automatch* | For automatch operations, a path that identifies the URL of the endpoint. Please refer to the link:http://apifortress.com/doc/automatch/[Automatch documentation]. | | yes
 |*headers* | An API response payload generally contains multiple headers you might want to test. Though not required, it is strongly suggested to provide at least the 'content-type' header. | `#[message.inboundProperties]` | no 
 |*variables* | Extra variables to be injected in the scope of the test. Examples could be the server name, the flow name, or the local time. The variables will be accessible to the test just like the `payload` variable. | empty | no
+|*failOnError* | Where supported, this flag will decide whether the flow should continue or not even when an I/O exception is raised. When set to true, the failure will stop the flow, when set to false, the flow will continue. To be used when the connector is placed in critical flows that need to continue in any case | true | yes
 
 |=== 
 
