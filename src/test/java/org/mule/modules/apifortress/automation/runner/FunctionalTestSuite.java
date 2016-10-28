@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 import org.mule.modules.apifortress.ApiFortressConnector;
+import org.mule.modules.apifortress.automation.functional.AutomatchPassthroughTestCases;
 import org.mule.modules.apifortress.automation.functional.AutomatchSynchronousTestCases;
 import org.mule.modules.apifortress.automation.functional.SingleTestPassthroughTestCases;
 import org.mule.modules.apifortress.automation.functional.SingleTestSynchronousTestCases;
@@ -18,7 +19,8 @@ import org.mule.tools.devkit.ctf.mockup.ConnectorTestContext;
 @SuiteClasses({
 SingleTestSynchronousTestCases.class,
 SingleTestPassthroughTestCases.class,
-AutomatchSynchronousTestCases.class
+AutomatchSynchronousTestCases.class,
+AutomatchPassthroughTestCases.class
 })
 
 public class FunctionalTestSuite {
