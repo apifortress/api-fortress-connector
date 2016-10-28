@@ -25,27 +25,28 @@ public class SingleTestPassthroughTestCases  extends AbstractTestCase<ApiFortres
                                                                 TestDataBuilder.VALID_HOOK_ENDPOINT,
                                                                 TestDataBuilder.VALID_TEST_ID,
                                                                 TestDataBuilder.VALID_HEADERS,
-                                                                TestDataBuilder.EMPTY_MAP);
+                                                                TestDataBuilder.EMPTY_MAP,true);
         
         Assert.assertEquals(payload,returnedEvent);
     }
     
     @Test(expected=ApiFortressIOException.class)
-    public void wrongProject() throws Exception {
+    public void wrongProjectFail() throws Exception {
         
-        getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
+        getConnector().singleTestPassthrough(TestDataBuilder.loadValidSuccessInputAsString(),
                 TestDataBuilder.VALID_HOOK_ENDPOINT+"25a",
                 TestDataBuilder.VALID_TEST_ID,
                 TestDataBuilder.VALID_HEADERS,
-                TestDataBuilder.EMPTY_MAP);
+                TestDataBuilder.EMPTY_MAP,true);
     }
     
-    @Test(expected=ApiFortressIOException.class)
-    public void wrongTest() throws Exception {
-        getConnector().singleTestSynchronous(TestDataBuilder.loadValidSuccessInputAsString(),
-                TestDataBuilder.VALID_HOOK_ENDPOINT,
-                TestDataBuilder.VALID_TEST_ID+"25a",
+    @Test
+    public void wrongProjectPass() throws Exception {
+        
+        getConnector().singleTestPassthrough(TestDataBuilder.loadValidSuccessInputAsString(),
+                TestDataBuilder.VALID_HOOK_ENDPOINT+"25a",
+                TestDataBuilder.VALID_TEST_ID,
                 TestDataBuilder.VALID_HEADERS,
-                TestDataBuilder.EMPTY_MAP);
+                TestDataBuilder.EMPTY_MAP,false);
     }
 }

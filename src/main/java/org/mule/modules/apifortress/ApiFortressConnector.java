@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Simone Pezzano - simone@apifortress.com
  *
  */
-@Connector(name = "api-fortress", friendlyName = "API Fortress", minMuleVersion = "3.8")
+@Connector(name = "api-fortress", friendlyName = "API Fortress", minMuleVersion="3.8.0")
 @RequiresEnterpriseLicense(allowEval = true)
 public class ApiFortressConnector {
 
@@ -106,8 +106,11 @@ public class ApiFortressConnector {
      * @param testId The test id. It can be found in the test interstitial page, on the API Fortress dashboard
      * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
      * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
+     * @param failOnError When set to true, the operation will fail when an I/O exception is raised. Set it to 'false' if the connector is placed in a critical flow 
      * @return The original payload passed to this operation
-     * @throws ApiFortressBadHookException When the provided URL is not valid
+     * @throws ApiFortressParseException When the connector couldn't either convert the payload to JSON or couldn't parse the API Fortress response
+     * @throws ApiFortressIOException When the communication with the API Fortress service fails
+     * @throws ApiFortressBadHookException When the provided API Hook URL is invalid
      */
     @Processor
     @Summary("Runs one test against the provided data and will pass through the original payload")
@@ -116,7 +119,8 @@ public class ApiFortressConnector {
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Test ID") @Summary("The test ID. You can retrieve it in the API Fortress interstitial page for the test") String testId,
             @Placement(group = "Settings") @FriendlyName("Headers collection Reference") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables Reference") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws ApiFortressBadHookException
+            @Placement(group = "Settings") @FriendlyName("Extra variables Reference") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables,
+            @Placement(group = "Settings") @FriendlyName("Fail on Error") @Summary("Uncheck if the flow should continue even if an exception raises") @Default("true") boolean failOnError) throws ApiFortressIOException,ApiFortressParseException,ApiFortressBadHookException
              {
         if(client == null) {
             createApiFortress();
@@ -126,8 +130,11 @@ public class ApiFortressConnector {
         try{
             client.runTest(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl, testId, false);
             
-        }catch(Exception e){
-            logger.error("Something wrong happened while trying to run the test",e);
+        }catch(ApiFortressIOException|ApiFortressParseException exception){
+        	if(failOnError)
+        		throw exception;
+        	else
+        		logger.error("Something wrong happened while trying to run the test",exception);
         }
         return digestedPayload;
     }
@@ -179,8 +186,11 @@ public class ApiFortressConnector {
      * to determine which tests need to run
      * @param headers The response headers of the payload it's being tested. 'content-type' is the only mandatory header 
      * @param variables Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time
+     * @param failOnError When set to true, the operation will fail when an I/O exception is raised. Set it to 'false' if the connector is placed in a critical flow
      * @return The original payload passed to this operation
-     * @throws ApiFortressBadHookException When the provided URL is not valid
+     * @throws ApiFortressParseException When the connector couldn't either convert the payload to JSON or couldn't parse the API Fortress response
+     * @throws ApiFortressIOException When the communication with the API Fortress service fails
+     * @throws ApiFortressBadHookException When the provided API Hook URL is invalid
      */
     @Processor
     @Summary("Forwards the payload to the automatch process which will run tests based on the apif.url inbound property and return the original payload")
@@ -189,7 +199,8 @@ public class ApiFortressConnector {
             @Placement(group = "Settings") @FriendlyName("API Hook") @Summary("The API hook URL. Create one using the API Fortress dashboard") String hook,
             @Placement(group = "Settings") @FriendlyName("Automatch path") @Summary("The Automatch path API Fortress uses to determine which tests to run") String automatch,
             @Placement(group = "Settings") @FriendlyName("Headers collection Reference") @Summary("The response headers") @RefOnly @Default("#[message.inboundProperties]") Map<String,Object>headers,
-            @Placement(group = "Settings") @FriendlyName("Extra variables Reference") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables) throws ApiFortressBadHookException{
+            @Placement(group = "Settings") @FriendlyName("Extra variables Reference") @Summary("Extra variables to be injected in the scope of the test") @RefOnly @Optional Map<String,Object>variables,
+    		@Placement(group = "Settings") @FriendlyName("Fail on Error") @Summary("Uncheck if the flow should continue even if an exception raises") @Default("true") boolean failOnError) throws ApiFortressIOException,ApiFortressParseException,ApiFortressBadHookException{
         if(client == null) {
             createApiFortress();
         }
@@ -198,8 +209,11 @@ public class ApiFortressConnector {
         try{
             client.runAutomatch(digestedPayload,sanitizeMap(headers),sanitizeMap(variables),hookUrl,true,automatch);
             
-        }catch(Exception e){
-            logger.error("Something wrong happened while trying to run the test",e);
+        }catch(ApiFortressIOException|ApiFortressParseException exception){
+        	if(failOnError)
+        		throw exception;
+        	else
+        		logger.error("Something wrong happened while trying to run the test",exception);
         }
         return digestedPayload;
     }

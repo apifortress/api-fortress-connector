@@ -3,12 +3,11 @@
  */
 package org.mule.modules.apifortress.automation.functional;
 
-import java.net.MalformedURLException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
 import org.mule.modules.apifortress.exceptions.ApiFortressBadHookException;
+import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 
 public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressConnector> {
@@ -27,7 +26,7 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
         Object returnedEvent = connector.automatchPassthrough(data,
                                                                 TestDataBuilder.VALID_HOOK_ENDPOINT,
                                                                 TestDataBuilder.VALID_AUTOMATCH_PATH,
-                                                                TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP);
+                                                                TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP,true);
         
         Assert.assertEquals(returnedEvent,data);
     }
@@ -42,7 +41,31 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
         connector.automatchPassthrough(data,
                                         "httpz",
                                         TestDataBuilder.VALID_AUTOMATCH_PATH,
-                                        TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP);
+                                        TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP,true);
+    }
+    
+    @Test(expected=ApiFortressIOException.class)
+    public void verifyFailOnErrorFail() throws Exception {
         
+        
+        ApiFortressConnector connector = getConnector();
+        String data = TestDataBuilder.loadValidSuccessInputAsString();
+     
+        connector.automatchPassthrough(data,
+                                        "https://www.whatevergoeshere.com/yay",
+                                        TestDataBuilder.VALID_AUTOMATCH_PATH,
+                                        TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP,true);
+    }
+    
+    public void verifyFailOnErrorPass() throws Exception {
+        
+        
+        ApiFortressConnector connector = getConnector();
+        String data = TestDataBuilder.loadValidSuccessInputAsString();
+     
+        connector.automatchPassthrough(data,
+                                        "https://www.whatevergoeshere.com/yay",
+                                        TestDataBuilder.VALID_AUTOMATCH_PATH,
+                                        TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP,false);
     }
 }

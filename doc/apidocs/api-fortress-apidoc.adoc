@@ -142,7 +142,7 @@ so that further actions can be done on it by the rest of the flow.
 ----
 
     
-                    
+                        
 ==== Attributes
 [cols=".^20%,.^20%,.^35%,.^20%,^.^5%", options="header"]
 |======================
@@ -177,6 +177,12 @@ headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.ht
 
 | 
 variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time+++ |  | {nbsp}
+
+
+
+
+| 
+failOnError  | +++boolean+++ | +++When set to true, the operation will fail when an I/O exception is raised. Set it to 'false' if the connector is placed in a critical flow+++ | true | {nbsp}
 
 
 |======================
@@ -284,7 +290,7 @@ The automatch system will determine which tests need to run based on the automat
 ----
 
     
-                    
+                        
 ==== Attributes
 [cols=".^20%,.^20%,.^35%,.^20%,^.^5%", options="header"]
 |======================
@@ -319,6 +325,12 @@ headers  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.ht
 
 | 
 variables  | +++<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a><<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html">Object</a>>+++ | +++Extra variables to be injected in the scope of the test. Ie. server name, flow name, geographic location, local time+++ |  | {nbsp}
+
+
+
+
+| 
+failOnError  | +++boolean+++ | +++When set to true, the operation will fail when an I/O exception is raised. Set it to 'false' if the connector is placed in a critical flow+++ | true | {nbsp}
 
 
 |======================
