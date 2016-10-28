@@ -142,7 +142,7 @@ Automatch is a system API fortress uses to decide which test to run for a partia
 |*automatch* | For automatch operations, a path that identifies the URL of the endpoint. Please refer to the link:http://apifortress.com/doc/automatch/[Automatch documentation]. | | yes
 |*headers* | An API response payload generally contains multiple headers you might want to test. Though not required, it is strongly suggested to provide at least the 'content-type' header. | `#[message.inboundProperties]` | no 
 |*variables* | Extra variables to be injected in the scope of the test. Examples could be the server name, the flow name, or the local time. The variables will be accessible to the test just like the `payload` variable. | empty | no
-|*failOnError* | Where supported, this flag will decide whether the flow should continue or not even when an I/O exception is raised. When set to true, the failure will stop the flow, when set to false, the flow will continue. To be used when the connector is placed in critical flows that need to continue in any case | true | yes
+|*failOnError* | Where supported, this flag will decide whether the flow should continue or not even when an I/O exception is raised. When set to true, the failure will throw the exception, when set to false, the flow will continue. To be used when the connector is placed in critical flows that need to continue in any case | true | yes
 
 |=== 
 
