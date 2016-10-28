@@ -15,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -142,7 +141,7 @@ public class ApiFortressClient {
         }
     }
     
-    private String run(String url,String body) throws ClientProtocolException, IOException{
+    private String run(String url,String body) throws IOException{
     	final HttpPost post = new HttpPost(url);
 		final StringEntity entity = new StringEntity(body);
 		entity.setContentType(CT_APPLICATION_JSON);

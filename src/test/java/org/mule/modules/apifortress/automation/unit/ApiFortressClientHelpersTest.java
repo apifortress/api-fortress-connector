@@ -4,10 +4,9 @@
 package org.mule.modules.apifortress.automation.unit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ import org.mule.modules.apifortress.automation.functional.TestDataBuilder;
 public class ApiFortressClientHelpersTest{
 	
 	@Test
-	public void verifyComposeUrl() throws MalformedURLException{
+	public void verifyComposeUrl() {
 		assertEquals(ApiFortressClient.composeUrl("http://www.foobar.com", "123", "run", true, false, true),"http://www.foobar.com/tests/123/run?sync=true&silent=false&dryrun=true&nosets=true");
 		assertEquals(ApiFortressClient.composeUrl("http://www.foobar.com", "123", "automatch", true, false, true),"http://www.foobar.com/tests/automatch?sync=true&silent=false&dryrun=true&nosets=true");
 	}

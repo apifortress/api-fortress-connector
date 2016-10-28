@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mule.modules.apifortress.ApiFortressConnector;
+import org.mule.modules.apifortress.exceptions.ApiFortressBadHookException;
 import org.mule.tools.devkit.ctf.junit.AbstractTestCase;
 
 public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressConnector> {
@@ -31,8 +32,8 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
         Assert.assertEquals(returnedEvent,data);
     }
     
-    @Test(expected=MalformedURLException.class)
-    public void verifyMalformedUrlException() throws Exception {
+    @Test(expected=ApiFortressBadHookException.class)
+    public void verifyBadHookException() throws Exception {
         
         
         ApiFortressConnector connector = getConnector();
