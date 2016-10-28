@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.apache.logging.log4j.status.StatusLogger;
 import org.glassfish.grizzly.utils.BufferInputStream;
-import org.mule.api.annotations.Config;
 import org.mule.api.annotations.Connector;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.display.FriendlyName;
@@ -22,7 +21,7 @@ import org.mule.api.annotations.licensing.RequiresEnterpriseLicense;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.annotations.param.RefOnly;
-import org.mule.modules.apifortress.config.ConnectorConfig;
+import org.mule.modules.apifortress.config.Config;
 import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
 import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
@@ -44,8 +43,8 @@ public class ApiFortressConnector {
     /**
      * The global configuration
      */
-    @Config
-    private ConnectorConfig config;
+    @org.mule.api.annotations.Config
+    private Config config;
     
     /**
      * The API Fortress logic. As an instance of the connector is deployed for each configuration
@@ -208,7 +207,7 @@ public class ApiFortressConnector {
      * 
      * @return the ConnectorConfig instance
      */
-    public ConnectorConfig getConfig() {
+    public Config getConfig() {
         return config;
     }
 
@@ -216,7 +215,7 @@ public class ApiFortressConnector {
      * Sets the connector config instance
      * @param config the connector config instance
      */
-    public void setConfig(ConnectorConfig config) {
+    public void setConfig(Config config) {
         this.config = config;
     }
     

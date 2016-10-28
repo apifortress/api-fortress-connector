@@ -15,7 +15,7 @@ import org.mule.api.annotations.param.Default;
  *
  */
 @Configuration(friendlyName = "Configuration",configElementName="config")
-public class ConnectorConfig {
+public class Config {
    
     
     /**
@@ -72,7 +72,7 @@ public class ConnectorConfig {
     @Placement(tab="Testing",group="Behavior")
     private boolean dryRun;
     
-    public ConnectorConfig(){
+    public Config(){
         super();
     }
 

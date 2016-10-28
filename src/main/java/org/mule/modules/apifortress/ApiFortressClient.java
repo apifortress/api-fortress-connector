@@ -24,7 +24,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-import org.mule.modules.apifortress.config.ConnectorConfig;
+import org.mule.modules.apifortress.config.Config;
 import org.mule.modules.apifortress.exceptions.ApiFortressIOException;
 import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 import org.springframework.stereotype.Component;
@@ -94,7 +94,7 @@ public class ApiFortressClient {
      * Constructor
      * @param config the connector config. Won't be referenced
      */
-    public ApiFortressClient(ConnectorConfig config) {
+    public ApiFortressClient(Config config) {
         super();
         
         connectionManager = new PoolingHttpClientConnectionManager();
