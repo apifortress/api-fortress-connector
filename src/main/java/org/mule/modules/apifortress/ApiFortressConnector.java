@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Simone Pezzano - simone@apifortress.com
  *
  */
-@Connector(name = "api-fortress", friendlyName = "API Fortress", minMuleVersion = "3.7")
+@Connector(name = "api-fortress", friendlyName = "API Fortress", minMuleVersion = "3.8")
 @RequiresEnterpriseLicense(allowEval = true)
 public class ApiFortressConnector {
 

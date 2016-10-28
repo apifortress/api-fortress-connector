@@ -11,12 +11,12 @@ The demo consists of 4 flows, demonstrating the various ways the connector can b
 
 ### Prerequisites
 In order to run the demo, you will need:
-* Anypoint Studio with Mule ESB 3.7 Runtime
+* Anypoint Studio with Mule ESB 3.8 Runtime
 * API Fortress Connector 1.0.0-RELEASE or higher
 * You will need an API Fortress cloud paid account or trial to run your own tests. This example will run demo tests as default
 
 ### Test the flows
-Import the flows using Anypoint Studio, properly configured to run Mule ESB 3.7 or 3.8.
+Import the flows using Anypoint Studio, properly configured to run Mule ESB 3.8.
 If you have an API Fortress cloud paid account or a trial account, configure the API Hook URL and the test ids according to your data. Otherwise,
 leave the example as is to run the demo tests.
 
