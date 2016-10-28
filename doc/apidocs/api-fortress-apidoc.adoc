@@ -66,6 +66,11 @@ is a multiple of this value. This is done to relax the sampling rate+++ |  1 | {
 Runs a single test in a synchronous flavor. The connector will wait for the result of the test and set it as payload
 +++
 
+==== XML Sample
+[source,xml]
+----
+<api-fortress:single-test-synchronous config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  testId="57ad92d81ed1aa212dd978bf" />
+----
 
     
                     
@@ -130,6 +135,11 @@ Runs a single test in an asynchronous flavor. The input payload will be put back
 so that further actions can be done on it by the rest of the flow.
 +++
 
+==== XML Sample
+[source,xml]
+----
+<api-fortress:single-test-passthrough config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  testId="57ad92d81ed1aa212dd978bf" />
+----
 
     
                     
@@ -195,6 +205,11 @@ it in the flow as payload.
 The automatch system will determine which tests need to run based on the automatch pattern.
 +++
 
+==== XML Sample
+[source,xml]
+----
+<api-fortress:automatch-synchronous config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  automatch="/products/5127" />
+----
 
     
                     
@@ -262,6 +277,11 @@ The connector will leave the payload untouched for further operations.
 The automatch system will determine which tests need to run based on the automatch pattern.
 +++
 
+==== XML Sample
+[source,xml]
+----
+<api-fortress:automatch-passthrough config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  automatch="/product/15" />
+----
 
     
                     

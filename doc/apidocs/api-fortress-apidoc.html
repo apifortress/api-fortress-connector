@@ -2243,6 +2243,14 @@ Runs a single test in a synchronous flavor. The connector will wait for the resu
 </p>
 </div>
 <div class="sect3">
+<h4 id="_xml_sample">XML Sample</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;api-fortress:single-test-synchronous</span> <span class="attribute-name">config-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">API_Fortress__Configuration</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">hook</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696</span><span class="delimiter">&quot;</span></span>  <span class="attribute-name">testId</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">57ad92d81ed1aa212dd978bf</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_attributes_2">Attributes</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
@@ -2340,6 +2348,14 @@ Runs a single test in a synchronous flavor. The connector will wait for the resu
 Runs a single test in an asynchronous flavor. The input payload will be put back in the flow untouched once the operation is done,
 so that further actions can be done on it by the rest of the flow.
 </p>
+</div>
+<div class="sect3">
+<h4 id="_xml_sample_2">XML Sample</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;api-fortress:single-test-passthrough</span> <span class="attribute-name">config-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">API_Fortress__Configuration</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">hook</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696</span><span class="delimiter">&quot;</span></span>  <span class="attribute-name">testId</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">57ad92d81ed1aa212dd978bf</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_attributes_3">Attributes</h4>
@@ -2440,6 +2456,14 @@ Runs an automatch testing suite in a synchronous way. The connector will wait fo
 it in the flow as payload.
 The automatch system will determine which tests need to run based on the automatch pattern.
 </p>
+</div>
+<div class="sect3">
+<h4 id="_xml_sample_3">XML Sample</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;api-fortress:automatch-synchronous</span> <span class="attribute-name">config-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">API_Fortress__Configuration</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">hook</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696</span><span class="delimiter">&quot;</span></span>  <span class="attribute-name">automatch</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/products/5127</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_attributes_4">Attributes</h4>
@@ -2546,6 +2570,14 @@ Runs an automatch testing suite in an asynchronous way. the API Fortress service
 The connector will leave the payload untouched for further operations.
 The automatch system will determine which tests need to run based on the automatch pattern.
 </p>
+</div>
+<div class="sect3">
+<h4 id="_xml_sample_4">XML Sample</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;api-fortress:automatch-passthrough</span> <span class="attribute-name">config-ref</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">API_Fortress__Configuration</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">hook</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696</span><span class="delimiter">&quot;</span></span>  <span class="attribute-name">automatch</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">/product/15</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_attributes_5">Attributes</h4>

@@ -1,3 +1,16 @@
-<!-- BEGIN_INCLUDE(api-fortress:greet) -->
-    <api-fortress: config-ref="" friend="#[map-payload:friend]" />
-<!-- END_INCLUDE(api-fortress:greet) -->
+<!-- BEGIN_INCLUDE(api-fortress:single-test-synchronous) -->
+    <api-fortress:single-test-synchronous config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  testId="57ad92d81ed1aa212dd978bf" />
+<!-- END_INCLUDE(api-fortress:single-test-synchronous) -->
+
+<!-- BEGIN_INCLUDE(api-fortress:single-test-passthrough) -->
+    <api-fortress:single-test-passthrough config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  testId="57ad92d81ed1aa212dd978bf" />
+<!-- END_INCLUDE(api-fortress:single-test-passthrough) -->
+
+
+<!-- BEGIN_INCLUDE(api-fortress:automatch-synchronous) -->
+    <api-fortress:automatch-synchronous config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  automatch="/products/5127" />
+<!-- END_INCLUDE(api-fortress:automatch-synchronous) -->
+
+<!-- BEGIN_INCLUDE(api-fortress:automatch-passthrough) -->
+    <api-fortress:automatch-passthrough config-ref="API_Fortress__Configuration" hook="https://mastiff.apifortress.com/app/api/rest/v3/55a33b1e-4c54-48f2-a60a-ab55550f28b696"  automatch="/product/15" />
+<!-- END_INCLUDE(api-fortress:automatch-passthrough) -->
