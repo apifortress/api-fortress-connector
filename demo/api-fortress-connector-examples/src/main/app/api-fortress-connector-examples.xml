@@ -21,19 +21,19 @@ The results of the tests is eventally sent back to the requesting agent.
 You should POST the JSON message:
 {&quot;sugo&quot;:1}
 to achieve a success">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/input" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/input" doc:name="/single/input"/>
         <api-fortress:single-test-synchronous config-ref="API_Fortress_dry" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" testId="57a9a08abbb0fb4afdf3faf0" doc:name="API Fortress" variables-ref="" payload-ref="#[payload]"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
     </flow>
     <flow name="single_test_endpoint_response" doc:description="In this example we run a single test against the response of a payload. API Fortress is using the passthrough operation so that the endpoint payload is preserved and sent back to the requesting agent.">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/endpoint_response" allowedMethods="GET" doc:name="HTTP"/>
-        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/single/endpoint_response" allowedMethods="GET" doc:name="/single/endpoint_response"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="GET /products"/>
         <api-fortress:single-test-passthrough config-ref="API_Fortress__cloud" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324"  doc:name="API Fortress" testId="57ce873ebbb0fb02e8069d42" payload-ref="#[payload]" variables-ref=""/>
         <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
     </flow>
     <flow name="automatch_endpoint_response" doc:description="This example is pretty similar to the previous one with a plot twist. The API Fortress configuration does not clearly state which test needs to be run but provides a path instead. The API Fortress cloud will determine the right tests to run.">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/automatch/response" doc:name="HTTP"/>
-        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="HTTP"/>
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/automatch/response" doc:name="/automatch/response"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/products" method="GET" doc:name="GET /products"/>
         <api-fortress:automatch-passthrough config-ref="API_Fortress__cloud" hook="https://mastiff.apifortress.com/app/api/rest/v3/9e05babb-e332-4715-bba5-a1a487a4b05c324" automatch="/app/api/examples/retail/products" doc:name="API Fortress" variables-ref="" payload-ref="#[payload]"/>
         <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
     </flow>
