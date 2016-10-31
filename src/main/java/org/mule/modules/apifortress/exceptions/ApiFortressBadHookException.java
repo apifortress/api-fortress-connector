@@ -4,12 +4,16 @@
 package org.mule.modules.apifortress.exceptions;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 @SuppressWarnings("serial")
 public class ApiFortressBadHookException extends IOException {
 
-	
 	public ApiFortressBadHookException(String hookUrl){
 		super("The API Hook "+hookUrl+" is not a valid URL");
+	}
+	
+	public ApiFortressBadHookException(String hookUrl,MalformedURLException cause){
+		super("The API Hook "+hookUrl+" is not a valid URL",cause);
 	}
 }

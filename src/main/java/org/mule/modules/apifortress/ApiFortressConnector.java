@@ -302,7 +302,7 @@ public class ApiFortressConnector {
     	try{
     		return new URL(hook);
     	}catch(MalformedURLException exception){
-    		throw new ApiFortressBadHookException(hook);
+    		throw new ApiFortressBadHookException(hook,exception);
     	}
     }
 
