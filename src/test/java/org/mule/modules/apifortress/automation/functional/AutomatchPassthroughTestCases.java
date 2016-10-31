@@ -57,6 +57,7 @@ public class AutomatchPassthroughTestCases extends AbstractTestCase<ApiFortressC
                                         TestDataBuilder.VALID_HEADERS,TestDataBuilder.EMPTY_MAP,true);
     }
     
+    @Test
     public void verifyFailOnErrorPass() throws Exception {
         
         
