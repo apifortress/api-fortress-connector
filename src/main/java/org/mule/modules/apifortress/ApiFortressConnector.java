@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.status.StatusLogger;
 import org.glassfish.grizzly.utils.BufferInputStream;
 import org.mule.api.annotations.Connector;
 import org.mule.api.annotations.Processor;
