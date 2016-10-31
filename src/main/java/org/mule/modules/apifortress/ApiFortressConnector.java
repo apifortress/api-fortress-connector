@@ -135,7 +135,7 @@ public class ApiFortressConnector {
         	if(failOnError)
         		throw exception;
         	else
-        		logger.error("An exception was thrown when the request was being sent, therefore no test has been executed. However, since the failOnError flag is set as true, the flow will continue unaffacted",exception);
+        		logger.error("An exception was thrown when the request was being sent, therefore no test has been executed. However, since the failOnError flag is set as true, the flow will continue unaffected",exception);
         }
         return digestedPayload;
     }
@@ -214,7 +214,7 @@ public class ApiFortressConnector {
         	if(failOnError)
         		throw exception;
         	else
-        		logger.error("An exception was thrown when the request was being sent, therefore no test has been executed. However, since the failOnError flag is set as true, the flow will continue unaffacted",exception);
+        		logger.error("An exception was thrown when the request was being sent, therefore no test has been executed. However, since the failOnError flag is set as true, the flow will continue unaffected",exception);
         }
         return digestedPayload;
     }
