@@ -14,7 +14,6 @@ http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mo
     <api-fortress:config name="API_Fortress_dry" silent="true" dryRun="true" doc:name="API Fortress: Configuration"/>
     <api-fortress:config name="API_Fortress__cloud" silent="true" doc:name="API Fortress: Configuration"/>
     <http:request-config name="HTTP_Request_Configuration" protocol="HTTPS" host="mastiff.apifortress.com" port="443" basePath="/app/api/examples/retail" doc:name="HTTP Request Configuration"/>
-    <mongo:config name="Mongo_DB__Configuration" username="admin" database="apif" doc:name="Mongo DB: Configuration"/>
     <asynchronous-processing-strategy name="Asynchronous_Processing_Strategy" maxThreads="2" minThreads="2" threadTTL="100" doc:name="Asynchronous Processing Strategy"/>
     <flow name="single_test_input" doc:description="In this example API Fortress will run a single test against a JSON payload you POST and return the result of the testing.
 The results of the tests is eventally sent back to the requesting agent.
