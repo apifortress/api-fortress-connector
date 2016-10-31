@@ -1,7 +1,7 @@
 # Mule API Fortress Connector Demo
 
 ## Introduction
-The demo consists of 4 flows, demonstrating the various ways the connector can be used.
+The demo consists of 3 flows, demonstrating the various ways the connector can be used.
 
 * single test input: demonstrates how to run a synchronous test on a provided JSON and return the result fo the execution
 * single test endpoint response: shows a more realistic scenario where API Fortress launches an asynchronous test against a resource the flow retrieved using an HTTP call
