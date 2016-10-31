@@ -28,6 +28,8 @@ import org.mule.modules.apifortress.exceptions.ApiFortressParseException;
 import org.mule.modules.apifortress.responses.TestExecutionResponse;
 import org.mule.modules.apifortress.responses.TestExecutionResponses;
 import org.mule.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
@@ -39,7 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequiresEnterpriseLicense(allowEval = true)
 public class ApiFortressConnector {
 
-    private static final StatusLogger logger = StatusLogger.getLogger();
+	private static final Logger logger = LoggerFactory.getLogger(ApiFortressConnector.class);
     
     /**
      * The global configuration
@@ -134,7 +136,7 @@ public class ApiFortressConnector {
         	if(failOnError)
         		throw exception;
         	else
-        		logger.error("Something wrong happened while trying to run the test",exception);
+        		logger.error("An exception was thrown when the request was being sent, therefore no test has been executed. However, since the failOnError flag is set as true, the flow will continue unaffacted",exception);
         }
         return digestedPayload;
     }
@@ -213,7 +215,7 @@ public class ApiFortressConnector {
         	if(failOnError)
         		throw exception;
         	else
-        		logger.error("Something wrong happened while trying to run the test",exception);
+        		logger.error("An exception was thrown when the request was being sent, therefore no test has been executed. However, since the failOnError flag is set as true, the flow will continue unaffacted",exception);
         }
         return digestedPayload;
     }
