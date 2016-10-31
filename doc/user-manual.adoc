@@ -193,9 +193,8 @@ Inside the `<version>` tags put the desired version number. Use the word `RELEAS
 ====
 
 == Demo Mule Applications Using Connector
-////
-add links to demos
-////
+
+You can download fully functional demo applications using the API Fortress connector from our link:https://apifortress.github.io/api-fortress-anypoint-connector/index.html[GitHub web site].
 
 === Simple Passthrough Use Case
 
