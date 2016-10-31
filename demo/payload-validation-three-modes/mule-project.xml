@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.8.1.ee" schemaVersion="5.3.0.0">
-    <name>api-fortress-connector-examples</name>
+    <name>payload-validation-three-modes</name>
     <description></description>
     <muleExtension name="API Fortress" qualifier="org.mule.tooling.ui.contribution.api-fortress.3.5.0"/>
     <muleExtension name="Mongo DB" qualifier="org.mule.tooling.ui.contribution.mongo.3.6.0"/>
